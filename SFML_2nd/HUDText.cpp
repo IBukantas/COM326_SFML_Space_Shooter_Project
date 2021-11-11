@@ -8,5 +8,5 @@ HUDText::HUDText()
 
 HUDText::~HUDText()
 {
-
+	//uhuhuuh
 }
