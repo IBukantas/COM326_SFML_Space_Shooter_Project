@@ -5,3 +5,8 @@ HUDText::HUDText()
 {
 
 }
+
+HUDText::~HUDText()
+{
+
+}
