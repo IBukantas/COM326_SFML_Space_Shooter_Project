@@ -4,7 +4,7 @@
 int main()
 {
     // Initialize random something
-    srand(time(NULL));
+    srand(time(0));
 
     // Create game class
     Game game;

@@ -10,9 +10,8 @@
 class Enemy
 {
 private:
-	// Sprite
-	sf::Sprite sprite;
-	sf::Texture texture;
+	// Shape
+	sf::CircleShape shape;
 
 	// Variables
 	int type;
@@ -20,20 +19,20 @@ private:
 	int hpMax;
 	int damage;
 	int points;
+
 	
 	// Private functions
-	void initTexture();
-	void initSprite();
+	void initShape();
 	void initVariables();
 
 public:
 	// Constructors / Deconstructors
-	Enemy();
+	Enemy(float pos_x, float pos_y);
 	virtual ~Enemy();
 
 	// Functions
 	void update();
-	void render(sf::RenderTarget& target);
+	void render(sf::RenderTarget* target);
 
 };
 

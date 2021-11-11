@@ -20,6 +20,8 @@ private:
 
 	// Player
 	Player* player;
+
+	// Enemy
 	Enemy* enemy;
 
 	// Mouse positions

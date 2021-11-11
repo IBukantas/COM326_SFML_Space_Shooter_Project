@@ -1,54 +1,29 @@
 #include "Enemy.h"
 
-// Private functions
-void Enemy::initTexture()
+void Enemy::initShape()
 {
-	// Load a texture from a file
-	
-	if (!this->texture.loadFromFile("images/enemy_image.png"))
-	{
-		std::cout << "Error: Enemy: InitTexture: Could not load texture file" << std::endl;
-	}
-}
-
-void Enemy::initSprite()
-{
-	// Set the texture to the sprite
-	this->sprite.setTexture(this->texture);
-
-	// Resize the sprite
-	this->sprite.scale(1.f, 1.f);
-
-	// Center the origin of the player
-	this->sprite.setOrigin(15.f, 0.f);
+	// Create the shaoe of the enemy
+	this->shape.setRadius(rand()% 50 + 20);
+	this->shape.setPointCount(rand()% 10 + 3);
 }
 
 void Enemy::initVariables()
 {
-	switch (type)
-	{
-	case 0:
-		break;
-	case 1:
-		break;
-	default:
-		break;
-	}
-	this->sprite.setPosition(20.f, 20.f);
-
-	this->type = rand() % 5;
-	this->hpMax = 100;
+	this->type = 0;
+	this->hpMax = this->shape.getRadius();
 	this->hp = 0;
-	this->damage = 1;
-	this->points = 5;
+	this->damage = this->shape.getPointCount();
+	this->points = shape.getRadius() + shape.getPointCount() / 5;
+	std::cout << "Enemy worth: " << points << " points" << std::endl;
 }
 
 // Constructors / Deconstructors
-Enemy::Enemy()
+Enemy::Enemy(float pos_x, float pos_y)
 {
-	this->initTexture();
-	this->initSprite();
+	this->initShape();
 	this->initVariables();
+
+	this->shape.setPosition(pos_x, pos_y);
 }
 
 Enemy::~Enemy()
@@ -62,8 +37,8 @@ void Enemy::update()
 
 }
 
-void Enemy::render(sf::RenderTarget& target)
+void Enemy::render(sf::RenderTarget* target)
 {
-	target.draw(this->sprite);
+	target->draw(this->shape);
 }
 

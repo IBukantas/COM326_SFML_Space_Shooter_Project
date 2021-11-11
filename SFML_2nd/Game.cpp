@@ -21,7 +21,7 @@ void Game::initPlayer()
 
 void Game::initEnemy()
 {
-	this->enemy = new Enemy();
+	this->enemy = new Enemy(20.f, 20.f);
 }
 
 // Constructors / Deconstructors
@@ -113,7 +113,7 @@ void Game::updateInput()
 	// Update mouse position
 	this->updateMousePositions();
 
-	//
+	// When left mouse button is pressed create new bullet
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->player->canAttack())
 	{
 		this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y, 0.f, -1.f, 15.f));
@@ -163,7 +163,7 @@ void Game::render()
 
 	// Draw all the objects
 	this->player->render(*this->window);
-	this->enemy->render(*this->window);
+	this->enemy->render(this->window);
 	
 	for (auto *bullet : this->bullets)
 	{
