@@ -18,6 +18,8 @@ void Player::initSprite()
 	// Resize the sprite
 	this->sprite.scale(1.f, 1.f);
 
+	this->sprite.setColor(sf::Color::Cyan);
+
 	// Center the origin of the player
 	this->sprite.setOrigin(15.f, 0.f);
 }

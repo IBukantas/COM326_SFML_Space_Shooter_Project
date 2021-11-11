@@ -25,9 +25,18 @@ void Enemy::initSprite()
 
 void Enemy::initVariables()
 {
+	switch (type)
+	{
+	case 0:
+		break;
+	case 1:
+		break;
+	default:
+		break;
+	}
 	this->sprite.setPosition(20.f, 20.f);
 
-	this->type = 0;
+	this->type = rand() % 5;
 	this->hpMax = 100;
 	this->hp = 0;
 	this->damage = 1;
