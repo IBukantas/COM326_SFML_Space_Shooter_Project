@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Bullet.h"
+#include "HUDText.h"
 
 class Game
 {
