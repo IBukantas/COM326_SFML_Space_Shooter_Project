@@ -155,6 +155,8 @@ void Game::update()
 
 	this->updateBullets();
 
+	std::cout << "mouse position x: " << mousePosWindow.x << std::endl;
+
 }
 
 void Game::render()
