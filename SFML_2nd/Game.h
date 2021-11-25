@@ -22,7 +22,9 @@ private:
 	Player* player;
 
 	// Enemy
-	Enemy* enemy;
+	float spawnTimer;
+	float spawnTimerMax;
+	std::vector<Enemy*> enemies;
 
 	// Mouse positions
 	sf::Vector2i mousePosWindow;
@@ -32,7 +34,7 @@ private:
 	void initTextures();
 
 	void initPlayer();
-	void initEnemy();
+	void initEnemies();
 
 public:
 	// Constructors / Deconstructors
@@ -47,6 +49,7 @@ public:
 	void updatePollEvents();
 	void updateInput();
 	void updateBullets();
+	void updateEnemies();
 	void update();
 	void render();
 };

@@ -5,6 +5,7 @@ void Enemy::initShape()
 	// Create the shape of the enemy
 	this->shape.setRadius(rand()% 50 + 20);
 	this->shape.setPointCount(rand()% 10 + 3);
+	this->shape.setFillColor(sf::Color(rand() % 255 + 1, rand() % 255 + 1, rand() % 255 + 1, 255));
 }
 
 void Enemy::initVariables()

@@ -3,7 +3,7 @@
 // Private functions
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode(1280, 720), "Run, Gun, Robot", sf::Style::Close | sf::Style::Titlebar);
+	this->window = new sf::RenderWindow(sf::VideoMode(1200, 800), "Run, Gun, Robot", sf::Style::Close | sf::Style::Titlebar);
 	this->window->setFramerateLimit(60);
 	this->window->setVerticalSyncEnabled(false);
 }
@@ -19,9 +19,10 @@ void Game::initPlayer()
 	this->player = new Player();
 }
 
-void Game::initEnemy()
+void Game::initEnemies()
 {
-	this->enemy = new Enemy(20.f, 20.f);
+	this->spawnTimerMax = 50.f;
+	this->spawnTimer = this->spawnTimerMax;
 }
 
 // Constructors / Deconstructors
@@ -31,7 +32,7 @@ Game::Game()
 	this->initTextures();
 
 	this->initPlayer();
-	this->initEnemy();
+	this->initEnemies();
 }
 
 Game::~Game()
@@ -143,6 +144,22 @@ void Game::updateBullets()
 	}
 }
 
+void Game::updateEnemies()
+{
+	this->spawnTimer += 0.5f;
+
+	if (this->spawnTimer >= this->spawnTimerMax)
+	{
+		this->enemies.push_back(new Enemy(rand() % 1000+10, rand() % 200));
+		this->spawnTimer = 0.f;
+	}
+
+	for (auto* enemy : this->enemies)
+	{
+		enemy->update();
+	}
+}
+
 void Game::update()
 {
 	// TODO: Update player velocity
@@ -154,6 +171,8 @@ void Game::update()
 	this->player->update();
 
 	this->updateBullets();
+
+	this->updateEnemies();
 }
 
 void Game::render()
@@ -162,13 +181,17 @@ void Game::render()
 	this->window->clear();
 
 	// Draw all the objects
-	this->player->render(*this->window);
-	this->enemy->render(this->window);
-	
-	for (auto *bullet : this->bullets)
+	for (auto* bullet : this->bullets)
 	{
 		bullet->render(this->window);
 	}
+
+	for (auto* enemy : this->enemies)
+	{
+		enemy->render(this->window);
+	}
+
+	this->player->render(*this->window);
 
 	// Show new frame
 	this->window->display();

@@ -14,6 +14,7 @@ void Player::initShape()
 	// Create the shape of the player
 	this->playerShape.setRadius(this->playerHealth);
 	this->playerShape.setOrigin(this->playerHealth, this->playerHealth);
+	this->playerShape.setPosition(600, 400);
 }
 
 // Constructors / Deconstructors
