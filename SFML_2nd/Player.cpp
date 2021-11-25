@@ -67,10 +67,10 @@ void Player::updateDamage()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::G))
 	{
 		this->playerHealth = this->playerHealth - 1;
-		if (this->playerHealth == 0)
-		{
-			;	// When health = 0 die :)
-		}
+	}
+	else
+	{
+		;	// When health = 0 die :)
 	}
 
 	// Update player's size
