@@ -4,7 +4,7 @@
 void Player::initVariables()
 {
 	this->movementSpeed = 10.f;	// Not used for anything rn
-	this->playerHealth = 30;
+	this->playerHealth = 40;
 	this->attackCooldownMax = 10.f;
 	this->attackCooldown = this->attackCooldownMax;
 }
@@ -13,6 +13,7 @@ void Player::initShape()
 {
 	// Create the shape of the player
 	this->playerShape.setRadius(this->playerHealth);
+	this->playerShape.setOrigin(this->playerHealth, this->playerHealth);
 }
 
 // Constructors / Deconstructors
@@ -75,6 +76,8 @@ void Player::updateDamage()
 
 	// Update player's size
 	this->playerShape.setRadius(this->playerHealth);
+
+	this->playerShape.setOrigin(this->playerHealth, this->playerHealth);
 }
 
 void Player::update()
