@@ -64,7 +64,7 @@ void Player::updateAttack()
 void Player::updateDamage()
 {
 	// When damage is taken, decrease player's health
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::G))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) && playerHealth > 0)
 	{
 		this->playerHealth = this->playerHealth - 1;
 	}
