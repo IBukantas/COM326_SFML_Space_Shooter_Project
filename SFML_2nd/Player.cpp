@@ -1,45 +1,25 @@
 #include "Player.h"
 
 // Private functions
-void Player::initTexture()
-{
-	// Load a texture from a file
-	if (!this->texture.loadFromFile("images/player_image.png"))
-	{
-		std::cout << "Error: Player: InitTexture: Could not load texture file" << std::endl;
-	}
-}
-
-void Player::initSprite()
-{
-	// Set the texture to the sprite
-	this->sprite.setTexture(this->texture);
-
-	// Resize the sprite
-	this->sprite.scale(1.f, 1.f);
-
-	this->sprite.setColor(sf::Color::Cyan);
-
-	// Center the origin of the player
-	this->sprite.setOrigin(15.f, 0.f);
-}
-
 void Player::initVariables()
 {
 	this->movementSpeed = 10.f;	// Not used for anything rn
+	this->playerHealth = 30;
 	this->attackCooldownMax = 10.f;
 	this->attackCooldown = this->attackCooldownMax;
-
 }
 
-
+void Player::initShape()
+{
+	// Create the shape of the player
+	this->playerShape.setRadius(this->playerHealth);
+}
 
 // Constructors / Deconstructors
 Player::Player()
 {
-	this->initTexture();
-	this->initSprite();
 	this->initVariables();
+	this->initShape();
 }
 
 Player::~Player()
@@ -51,13 +31,13 @@ Player::~Player()
 const sf::Vector2f& Player::getPos() const
 {
 	// TODO: insert return statement here
-	return this->sprite.getPosition();
+	return this->playerShape.getPosition();
 }
 
 // Functions
 void Player::move(const float dirX, const float dirY)
 {
-	this->sprite.move(this->movementSpeed * dirX, this->movementSpeed * dirY);
+	this->playerShape.move(this->movementSpeed * dirX, this->movementSpeed * dirY);
 }
 
 const bool Player::canAttack()
@@ -81,12 +61,29 @@ void Player::updateAttack()
 	}
 }
 
+void Player::updateDamage()
+{
+	// When damage is taken, decrease player's health
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::G))
+	{
+		this->playerHealth = this->playerHealth - 1;
+		if (this->playerHealth == 0)
+		{
+			;	// When health = 0 die :)
+		}
+	}
+
+	// Update player's size
+	this->playerShape.setRadius(this->playerHealth);
+}
+
 void Player::update()
 {
 	this->updateAttack();
+	this->updateDamage();
 }
 
 void Player::render(sf::RenderTarget& target)
 {
-	target.draw(this->sprite);
+	target.draw(this->playerShape);
 }

@@ -2,7 +2,7 @@
 
 void Enemy::initShape()
 {
-	// Create the shaoe of the enemy
+	// Create the shape of the enemy
 	this->shape.setRadius(rand()% 50 + 20);
 	this->shape.setPointCount(rand()% 10 + 3);
 }

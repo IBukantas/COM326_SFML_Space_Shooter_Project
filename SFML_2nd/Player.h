@@ -11,18 +11,17 @@ class Player
 {
 private:
 	// Sprite
-	sf::Sprite sprite;
-	sf::Texture texture;
+	sf::CircleShape playerShape;
 
 	// Variables
 	float movementSpeed;
+	int playerHealth;
 
 	float attackCooldown;
 	float attackCooldownMax;
 
 	// Private functions
-	void initTexture();
-	void initSprite();
+	void initShape();
 	void initVariables();
 
 public:
@@ -33,13 +32,14 @@ public:
 	// Accessors
 	const sf::Vector2f& getPos() const;
 
-	// Private Variables
+	// Public Variables
 
 	// Functions
 	void move(const float dirX, const float dirY);
 	const bool canAttack();
 
 	void updateAttack();
+	void updateDamage();
 	void update();
 	void render(sf::RenderTarget& target);
 };
