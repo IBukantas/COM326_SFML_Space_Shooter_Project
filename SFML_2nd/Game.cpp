@@ -3,7 +3,7 @@
 // Private functions
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode(1200, 800), "Run, Gun, Robot", sf::Style::Close | sf::Style::Titlebar);
+	this->window = new sf::RenderWindow(sf::VideoMode(1400, 1000), "Run, Gun, Robot", sf::Style::Close | sf::Style::Titlebar | sf::Style::Fullscreen);
 	this->window->setFramerateLimit(60);
 	this->window->setVerticalSyncEnabled(false);
 }
@@ -21,7 +21,7 @@ void Game::initPlayer()
 
 void Game::initEnemies()
 {
-	this->spawnTimerMax = 50.f;
+	this->spawnTimerMax = 10.f;
 	this->spawnTimer = this->spawnTimerMax;
 }
 
@@ -85,8 +85,7 @@ void Game::updatePollEvents()
 		}
 		if (e.Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape)
 		{
-			// TODO: When escape is pressed open menu
-			;
+			this->window->close();
 		}
 	}
 }
@@ -150,7 +149,23 @@ void Game::updateEnemies()
 
 	if (this->spawnTimer >= this->spawnTimerMax)
 	{
-		this->enemies.push_back(new Enemy(rand() % 1000+10, rand() % 200));
+		switch (rand() % 3)
+		{
+		case 0:
+			this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, 0));
+			break;
+		case 1:
+			this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, this->window->getSize().y - 50));
+			break;
+		case 2:
+			this->enemies.push_back(new Enemy(0, rand() % this->window->getSize().y));
+			break;
+		case 3:
+			this->enemies.push_back(new Enemy(this->window->getSize().x - 50, rand() % this->window->getSize().y));
+			break;
+		default:
+			break;
+		}
 		this->spawnTimer = 0.f;
 	}
 

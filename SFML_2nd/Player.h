@@ -39,7 +39,6 @@ public:
 	const bool canAttack();
 
 	void updateAttack();
-	void updateDamage();
 	void update();
 	void render(sf::RenderTarget& target);
 };

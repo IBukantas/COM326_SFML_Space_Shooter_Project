@@ -63,28 +63,9 @@ void Player::updateAttack()
 	}
 }
 
-void Player::updateDamage()
-{
-	// When damage is taken, decrease player's health
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) && playerHealth > 0)
-	{
-		this->playerHealth = this->playerHealth - 1;
-	}
-	else
-	{
-		;	// When health = 0 die :)
-	}
-
-	// Update player's size
-	this->playerShape.setRadius(this->playerHealth);
-
-	this->playerShape.setOrigin(this->playerHealth, this->playerHealth);
-}
-
 void Player::update()
 {
 	this->updateAttack();
-	this->updateDamage();
 }
 
 void Player::render(sf::RenderTarget& target)
