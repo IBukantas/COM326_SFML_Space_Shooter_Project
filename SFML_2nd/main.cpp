@@ -3,7 +3,7 @@
 
 int main()
 {
-    // Initialize random something
+    // Initialize random variable
     srand(time(0));
 
     // Create game class

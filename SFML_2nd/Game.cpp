@@ -3,7 +3,7 @@
 // Private functions
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode(1400, 1000), "Run, Gun, Robot", sf::Style::Close | sf::Style::Titlebar | sf::Style::Fullscreen);
+	this->window = new sf::RenderWindow(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Run, Gun, Robot", sf::Style::None);
 	this->window->setFramerateLimit(60);
 	this->window->setVerticalSyncEnabled(false);
 }
@@ -21,7 +21,7 @@ void Game::initPlayer()
 
 void Game::initEnemies()
 {
-	this->spawnTimerMax = 10.f;
+	this->spawnTimerMax = 20.f;
 	this->spawnTimer = this->spawnTimerMax;
 }
 
@@ -48,6 +48,12 @@ Game::~Game()
 
 	// Delete bullets
 	for (auto *i : this->bullets)
+	{
+		delete i;
+	}
+
+	// Delete enemies
+	for (auto* i : this->enemies)
 	{
 		delete i;
 	}
@@ -79,10 +85,6 @@ void Game::updatePollEvents()
 	sf::Event e;
 	while (this->window->pollEvent(e))
 	{
-		if (e.Event::type == sf::Event::Closed)
-		{
-			this->window->close();
-		}
 		if (e.Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape)
 		{
 			this->window->close();
@@ -149,29 +151,26 @@ void Game::updateEnemies()
 
 	if (this->spawnTimer >= this->spawnTimerMax)
 	{
-		switch (rand() % 3)
+		switch (rand() % 4)
 		{
-		case 0:
-			this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, 0));
-			break;
-		case 1:
-			this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, this->window->getSize().y - 50));
-			break;
-		case 2:
-			this->enemies.push_back(new Enemy(0, rand() % this->window->getSize().y));
-			break;
-		case 3:
-			this->enemies.push_back(new Enemy(this->window->getSize().x - 50, rand() % this->window->getSize().y));
-			break;
 		default:
+			this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, -300.f));
 			break;
 		}
 		this->spawnTimer = 0.f;
 	}
 
-	for (auto* enemy : this->enemies)
+	for (int i = 0; i < this->enemies.size(); i++)
 	{
-		enemy->update();
+		this->enemies[i]->update();
+
+		// Remove enemy once out of bounds
+
+		if (this->enemies[i]->getBounds().top > window->getSize().y)
+		{
+			this->enemies.erase(this->enemies.begin() + i);
+		}
+		std::cout << this->enemies.size() << "\n";
 	}
 }
 

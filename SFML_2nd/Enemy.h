@@ -17,6 +17,7 @@ private:
 	int type;
 	int hp;
 	int hpMax;
+	float speed;
 	int damage;
 	int points;
 
@@ -29,6 +30,9 @@ public:
 	// Constructors / Deconstructors
 	Enemy(float pos_x, float pos_y);
 	virtual ~Enemy();
+
+	// Accessors
+	const sf::FloatRect getBounds() const;
 
 	// Functions
 	void update();

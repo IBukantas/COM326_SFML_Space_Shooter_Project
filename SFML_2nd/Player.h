@@ -31,6 +31,7 @@ public:
 
 	// Accessors
 	const sf::Vector2f& getPos() const;
+	const sf::FloatRect getBounds() const;
 
 	// Public Variables
 

@@ -3,9 +3,9 @@
 // Private functions
 void Player::initVariables()
 {
-	this->movementSpeed = 10.f;	// Not used for anything rn
+	this->movementSpeed = 20.f;	// Not used for anything rn
 	this->playerHealth = 40;
-	this->attackCooldownMax = 10.f;
+	this->attackCooldownMax = 6.f;
 	this->attackCooldown = this->attackCooldownMax;
 }
 
@@ -14,7 +14,7 @@ void Player::initShape()
 	// Create the shape of the player
 	this->playerShape.setRadius(this->playerHealth);
 	this->playerShape.setOrigin(this->playerHealth, this->playerHealth);
-	this->playerShape.setPosition(600, 400);
+	this->playerShape.setPosition(sf::VideoMode::getDesktopMode().width / 2, sf::VideoMode::getDesktopMode().height / 2 + 200);
 }
 
 // Constructors / Deconstructors
@@ -34,6 +34,11 @@ const sf::Vector2f& Player::getPos() const
 {
 	// TODO: insert return statement here
 	return this->playerShape.getPosition();
+}
+
+const sf::FloatRect Player::getBounds() const
+{
+	return this->playerShape.getGlobalBounds();
 }
 
 // Functions

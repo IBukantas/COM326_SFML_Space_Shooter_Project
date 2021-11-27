@@ -11,6 +11,9 @@
 class Game
 {
 private:
+	// Clock
+	sf::Clock clock;
+
 	// Window
 	sf::RenderWindow* window;
 
