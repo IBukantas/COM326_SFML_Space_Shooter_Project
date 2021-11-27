@@ -13,7 +13,7 @@ void Enemy::initVariables()
 	this->type = 0;
 	this->hpMax = this->shape.getRadius();
 	this->hp = 0;
-	this->speed = (62 - this->shape.getRadius()) / 2;
+	this->speed = (62 - this->shape.getRadius()) / 3;
 	this->damage = this->shape.getPointCount();
 	this->points = shape.getRadius() + shape.getPointCount() / 5;
 	std::cout << "Enemy worth: " << points << " points" << std::endl;
