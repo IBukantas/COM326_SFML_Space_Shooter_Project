@@ -14,6 +14,21 @@ void Game::initTextures()
 	this->textures["BULLET"]->loadFromFile("images/projectile_image.png");
 }
 
+void Game::initGUI()
+{
+	// Load font
+	if (!this->font.loadFromFile("fonts/arial.ttf"))
+	{
+		std::cout << "ERROR::GAME::Failed to load font" << "\n";
+	}
+
+	// Initialise point text
+	this->pointText.setFont(this->font);
+	this->pointText.setCharacterSize(24);
+	this->pointText.setFillColor(sf::Color::White);
+	this->pointText.setString("Test: 123");
+}
+
 void Game::initPlayer()
 {
 	this->player = new Player();
@@ -30,7 +45,7 @@ Game::Game()
 {
 	this->initWindow();
 	this->initTextures();
-
+	this->initGUI();
 	this->initPlayer();
 	this->initEnemies();
 }
@@ -72,9 +87,7 @@ void Game::run()
 
 void Game::updateMousePositions()
 {
-	/*
-	* Updates mouse positions:
-	*/
+	// Updates mouse positions
 
 	this->mousePosWindow = sf::Mouse::getPosition(*this->window);
 }
@@ -122,6 +135,11 @@ void Game::updateInput()
 	}
 }
 
+void Game::updateGUI()
+{
+
+}
+
 void Game::updateBullets()
 {
 	unsigned counter = 0;
@@ -139,49 +157,61 @@ void Game::updateBullets()
 		}
 		++counter;
 
-		std::cout << "Number of bullets: " << this->bullets.size() << "\n";	// Shows number of bullet instances
-
-
+		//std::cout << "Number of bullets: " << this->bullets.size() << "\n";	// Shows number of bullet instances
 	}
 }
 
-void Game::updateEnemiesAndCombat()
+void Game::updateEnemies()
 {
+	// Spawning
 	this->spawnTimer += 0.5f;
 
 	if (this->spawnTimer >= this->spawnTimerMax)
 	{
-		this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, -300.f));
+		this->enemies.push_back(new Enemy(rand() % this->window->getSize().x - 20, -300.f));
 
 		this->spawnTimer = 0.f;
 	}
 
+	// Update
+	unsigned counter = 0;
+	for (auto* enemy : this->enemies)
+	{
+		enemy->update();
+
+		// Enemy culling (top of screen)
+		if (enemy->getBounds().top > sf::VideoMode::getDesktopMode().height)
+		{
+			// Delete enemy
+			delete this->enemies.at(counter);
+			this->enemies.erase(this->enemies.begin() + counter);
+			--counter;
+		}
+		++counter;
+
+		//std::cout << "Number of enemies: " << this->enemies.size() << "\n";	// Shows number of enemy instances
+	}
+}
+
+void Game::updateCombat()
+{
 	for (int i = 0; i < this->enemies.size(); i++)
 	{
 		bool enemy_removed = false;
-		this->enemies[i]->update();
 
-		for (size_t k = 0; k < this->bullets.size() && !enemy_removed; k++)
+		for (size_t k = 0; k < this->bullets.size() && enemy_removed == false; k++)
 		{
-			if (this->bullets[k]->getBounds().intersects(this->enemies[i]->getBounds()))
+			if (this->enemies[i]->getBounds().intersects(this->bullets[k]->getBounds()))
 			{
+				delete this->enemies[i];
+				this->enemies.erase(this->enemies.begin() + i);
+
+				delete this->bullets[k];
 				this->bullets.erase(this->bullets.begin() + k);
-				this->enemies.erase(this->enemies.begin() + i);
+
 				enemy_removed = true;
 			}
 		}
-
-		// Remove enemy once out of bounds
-		if (!enemy_removed)
-		{
-			if (this->enemies[i]->getBounds().top > window->getSize().y)
-			{
-				this->enemies.erase(this->enemies.begin() + i);
-				std::cout << "Number of enemies: " << this->enemies.size() << "\n";
-				enemy_removed = true;
-			}
-		}
-
 	}
 }
 
@@ -197,7 +227,16 @@ void Game::update()
 
 	this->updateBullets();
 
-	this->updateEnemiesAndCombat();
+	this->updateEnemies();
+		
+	this->updateCombat();
+
+	this->updateGUI();
+}
+
+void Game::renderGUI()
+{
+	this->window->draw(this->pointText);
 }
 
 void Game::render()
@@ -217,6 +256,8 @@ void Game::render()
 	}
 
 	this->player->render(*this->window);
+
+	this->renderGUI();
 
 	// Show new frame
 	this->window->display();

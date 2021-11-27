@@ -21,6 +21,10 @@ private:
 	std::map<std::string, sf::Texture*> textures;
 	std::vector<Bullet*> bullets;
 
+	//GUI
+	sf::Font font;
+	sf::Text pointText;
+
 	// Player
 	Player* player;
 
@@ -35,6 +39,7 @@ private:
 	// Private Functions
 	void initWindow();
 	void initTextures();
+	void initGUI();
 
 	void initPlayer();
 	void initEnemies();
@@ -51,9 +56,12 @@ public:
 
 	void updatePollEvents();
 	void updateInput();
+	void updateGUI();
 	void updateBullets();
-	void updateEnemiesAndCombat();
+	void updateEnemies();
+	void updateCombat();
 	void update();
+	void renderGUI();
 	void render();
 };
 
