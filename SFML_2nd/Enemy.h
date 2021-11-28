@@ -18,9 +18,10 @@ private:
 	int type;
 	int hp;
 	int hpMax;
-	float speed;
+	int speed;
 	int damage;
 	int scrap;
+	int lastType;
 
 	
 	// Private functions
@@ -36,8 +37,12 @@ public:
 	const sf::FloatRect getBounds() const;
 	const int& getScrap() const;
 
+	// Modifiers
+	void setType(const int _type);
+
 	// Functions
 	void update();
+	void updateStats();
 	void render(sf::RenderTarget* target);
 
 };

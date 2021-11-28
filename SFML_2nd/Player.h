@@ -35,6 +35,7 @@ public:
 
 	// Modifiers
 	void setPosition(const float x, const float y);
+	void setRadius(const float r);
 
 
 	// Functions

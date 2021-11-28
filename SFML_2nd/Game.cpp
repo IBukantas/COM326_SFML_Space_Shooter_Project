@@ -51,6 +51,7 @@ void Game::initPlayer()
 
 void Game::initEnemies()
 {
+	this->currentType = 0;
 	this->spawnTimerMax = 20.f;
 	this->spawnTimer = this->spawnTimerMax;
 }
@@ -251,10 +252,32 @@ void Game::updateEnemies()
 			this->enemies.erase(this->enemies.begin() + counter);
 			--counter;
 		}
+		// Enemy culling (player contact)
+		if (enemy->getBounds().intersects(this->player->getBounds()))
+		{
+			// Delete enemy
+			delete this->enemies.at(counter);
+			this->enemies.erase(this->enemies.begin() + counter);
+			--counter;
+		}
+
+		/*
+		if (this->scrap > 100 && this->currentType < 1)
+		{
+			this->currentType = 1;
+			enemy->setType(currentType);
+		}
+		*/
+
 		++counter;
 
 		//std::cout << "Number of enemies: " << this->enemies.size() << "\n";	// Shows number of enemy instances
 	}
+}
+
+void Game::updateEnemyType()
+{
+	
 }
 
 void Game::updateCombat()
@@ -290,6 +313,8 @@ void Game::update()
 	this->updateInput();
 
 	this->updateWorld();
+
+	this->updateEnemyType();
 
 	this->player->update();
 

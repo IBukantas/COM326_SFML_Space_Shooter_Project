@@ -33,6 +33,7 @@ private:
 
 	// Systems
 	unsigned scrap;
+	unsigned currentType;
 
 	// Player
 	Player* player;
@@ -72,6 +73,7 @@ public:
 	void updateCollision();
 	void updateBullets();
 	void updateEnemies();
+	void updateEnemyType();
 	void updateCombat();
 	void update();
 	

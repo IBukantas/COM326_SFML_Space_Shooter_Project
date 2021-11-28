@@ -47,6 +47,11 @@ void Player::setPosition(const float x, const float y)
 	this->playerShape.setPosition(x, y);
 }
 
+void Player::setRadius(const float r)
+{
+	this->playerShape.setRadius(r);
+}
+
 // Functions
 void Player::move(const float dirX, const float dirY)
 {
