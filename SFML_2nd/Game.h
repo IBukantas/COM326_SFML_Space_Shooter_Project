@@ -2,6 +2,8 @@
 #define GAME_H
 
 #include<map>
+#include<string>
+#include<sstream>
 
 #include "Player.h"
 #include "Enemy.h"
@@ -23,11 +25,14 @@ private:
 
 	//GUI
 	sf::Font font;
-	sf::Text pointText;
+	sf::Text scrapText;
 
 	// World
 	sf::Texture worldBackgroundTex;
 	sf::Sprite worldBackground;
+
+	// Systems
+	unsigned scrap;
 
 	// Player
 	Player* player;
@@ -45,6 +50,7 @@ private:
 	void initTextures();
 	void initGUI();
 	void initWorld();
+	void initSystems();
 
 	void initPlayer();
 	void initEnemies();

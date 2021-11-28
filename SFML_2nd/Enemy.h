@@ -14,12 +14,13 @@ private:
 	sf::CircleShape shape;
 
 	// Variables
+	unsigned pointCount;
 	int type;
 	int hp;
 	int hpMax;
 	float speed;
 	int damage;
-	int points;
+	int scrap;
 
 	
 	// Private functions
@@ -33,6 +34,7 @@ public:
 
 	// Accessors
 	const sf::FloatRect getBounds() const;
+	const int& getScrap() const;
 
 	// Functions
 	void update();

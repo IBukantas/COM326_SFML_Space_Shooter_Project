@@ -23,10 +23,10 @@ void Game::initGUI()
 	}
 
 	// Initialise point text
-	this->pointText.setFont(this->font);
-	this->pointText.setCharacterSize(24);
-	this->pointText.setFillColor(sf::Color::White);
-	this->pointText.setString("Test: 123");
+	this->scrapText.setFont(this->font);
+	this->scrapText.setCharacterSize(24);
+	this->scrapText.setFillColor(sf::Color::White);
+	this->scrapText.setString("Scrap:");
 }
 
 void Game::initWorld()
@@ -37,6 +37,11 @@ void Game::initWorld()
 	}
 
 	this->worldBackground.setTexture(this->worldBackgroundTex); */
+}
+
+void Game::initSystems()
+{
+	this->scrap = 0;
 }
 
 void Game::initPlayer()
@@ -57,6 +62,7 @@ Game::Game()
 	this->initTextures();
 	this->initGUI();
 	this->initWorld();
+	this->initSystems();
 	this->initPlayer();
 	this->initEnemies();
 }
@@ -148,7 +154,11 @@ void Game::updateInput()
 
 void Game::updateGUI()
 {
+	std::stringstream ss;
 
+	ss << "Scrap: " << this->scrap;
+
+	this->scrapText.setString(ss.str());
 }
 
 void Game::updateWorld()
@@ -257,6 +267,8 @@ void Game::updateCombat()
 		{
 			if (this->enemies[i]->getBounds().intersects(this->bullets[k]->getBounds()))
 			{
+				this->scrap += this->enemies[i]->getScrap();
+
 				delete this->enemies[i];
 				this->enemies.erase(this->enemies.begin() + i);
 
@@ -294,7 +306,7 @@ void Game::update()
 
 void Game::renderGUI()
 {
-	this->window->draw(this->pointText);
+	this->window->draw(this->scrapText);
 }
 
 void Game::renderWorld()

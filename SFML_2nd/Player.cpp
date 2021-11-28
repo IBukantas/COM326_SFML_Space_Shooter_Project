@@ -3,9 +3,9 @@
 // Private functions
 void Player::initVariables()
 {
-	this->movementSpeed = 10.f;	// Not used for anything rn
+	this->movementSpeed = 12.f;	// Not used for anything rn
 	this->playerHealth = 40;
-	this->attackCooldownMax = 6.f;
+	this->attackCooldownMax = 4.f;
 	this->attackCooldown = this->attackCooldownMax;
 }
 
