@@ -33,7 +33,9 @@ public:
 	const sf::Vector2f& getPos() const;
 	const sf::FloatRect getBounds() const;
 
-	// Public Variables
+	// Modifiers
+	void setPosition(const float x, const float y);
+
 
 	// Functions
 	void move(const float dirX, const float dirY);

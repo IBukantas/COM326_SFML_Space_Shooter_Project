@@ -41,6 +41,12 @@ const sf::FloatRect Player::getBounds() const
 	return this->playerShape.getGlobalBounds();
 }
 
+// Modifiers
+void Player::setPosition(const float x, const float y)
+{
+	this->playerShape.setPosition(x, y);
+}
+
 // Functions
 void Player::move(const float dirX, const float dirY)
 {

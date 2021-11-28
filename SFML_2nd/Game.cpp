@@ -3,7 +3,7 @@
 // Private functions
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Run, Gun, Robot", sf::Style::None);
+	this->window = new sf::RenderWindow(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Run, Gun, Robot", sf::Style::Fullscreen);
 	this->window->setFramerateLimit(60);
 	this->window->setVerticalSyncEnabled(false);
 }
@@ -29,6 +29,16 @@ void Game::initGUI()
 	this->pointText.setString("Test: 123");
 }
 
+void Game::initWorld()
+{
+	/*if (!this->worldBackgroundTex.loadFromFile("images/background1.jpg"))
+	{
+		std::cout << "ERROR::GAME::Could not load background texture" << "\n";
+	}
+
+	this->worldBackground.setTexture(this->worldBackgroundTex); */
+}
+
 void Game::initPlayer()
 {
 	this->player = new Player();
@@ -46,6 +56,7 @@ Game::Game()
 	this->initWindow();
 	this->initTextures();
 	this->initGUI();
+	this->initWorld();
 	this->initPlayer();
 	this->initEnemies();
 }
@@ -112,7 +123,7 @@ void Game::updateInput()
 	{
 		this->player->move(-1.f, 0.f);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		this->player->move(1.f, 0.f);
 	}
@@ -120,7 +131,7 @@ void Game::updateInput()
 	{
 		this->player->move(0.f, -1.f);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		this->player->move(0, 1.f);
 	}
@@ -138,6 +149,33 @@ void Game::updateInput()
 void Game::updateGUI()
 {
 
+}
+
+void Game::updateWorld()
+{
+
+}
+
+void Game::updateCollision()
+{
+	// left and right world collision
+	if (this->player->getBounds().left < -this->player->getBounds().width / 2)
+	{
+		this->player->setPosition(-this->player->getBounds().width / 2 + (this->player->getBounds().width / 2), this->player->getBounds().top + (this->player->getBounds().height / 2));
+	}
+	else if (this->player->getBounds().left + this->player->getBounds().width > sf::VideoMode::getDesktopMode().width + this->player->getBounds().width / 2)
+	{
+		this->player->setPosition(sf::VideoMode::getDesktopMode().width, this->player->getBounds().top + (this->player->getBounds().height / 2));
+	}
+	// top and bottom world collision
+	if (this->player->getBounds().top < 0.f)
+	{
+		this->player->setPosition(this->player->getBounds().left + this->player->getBounds().width / 2, this->player->getBounds().height / 2);
+	}
+	else if (this->player->getBounds().top + this->player->getBounds().height / 2 > sf::VideoMode::getDesktopMode().height)
+	{
+		this->player->setPosition(this->player->getBounds().left + this->player->getBounds().width / 2, sf::VideoMode::getDesktopMode().height);
+	}
 }
 
 void Game::updateBullets()
@@ -168,7 +206,7 @@ void Game::updateEnemies()
 
 	if (this->spawnTimer >= this->spawnTimerMax)
 	{
-		this->enemies.push_back(new Enemy(rand() % this->window->getSize().x - 20, -300.f));
+		this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, -300.f));
 
 		this->spawnTimer = 0.f;
 	}
@@ -181,6 +219,22 @@ void Game::updateEnemies()
 
 		// Enemy culling (top of screen)
 		if (enemy->getBounds().top > sf::VideoMode::getDesktopMode().height)
+		{
+			// Delete enemy
+			delete this->enemies.at(counter);
+			this->enemies.erase(this->enemies.begin() + counter);
+			--counter;
+		}
+		// Enemy culling (left side of screen)
+		if (enemy->getBounds().left < 0.f)
+		{
+			// Delete enemy
+			delete this->enemies.at(counter);
+			this->enemies.erase(this->enemies.begin() + counter);
+			--counter;
+		}
+		// Enemy culling (right side of screen)
+		if (enemy->getBounds().left + enemy->getBounds().width > sf::VideoMode::getDesktopMode().width)
 		{
 			// Delete enemy
 			delete this->enemies.at(counter);
@@ -223,7 +277,11 @@ void Game::update()
 	this->updatePollEvents();
 	this->updateInput();
 
+	this->updateWorld();
+
 	this->player->update();
+
+	this->updateCollision();
 
 	this->updateBullets();
 
@@ -239,10 +297,18 @@ void Game::renderGUI()
 	this->window->draw(this->pointText);
 }
 
+void Game::renderWorld()
+{
+	this->window->draw(this->worldBackground);
+}
+
 void Game::render()
 {
 	// Clear last frame
 	this->window->clear();
+
+	// Draw world background
+	this->renderWorld();
 
 	// Draw all the objects
 	for (auto* bullet : this->bullets)
@@ -258,6 +324,8 @@ void Game::render()
 	this->player->render(*this->window);
 
 	this->renderGUI();
+
+	
 
 	// Show new frame
 	this->window->display();
