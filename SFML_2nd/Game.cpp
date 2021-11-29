@@ -3,7 +3,7 @@
 // Private functions
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Run, Gun, Robot", sf::Style::Fullscreen);
+	this->window = new sf::RenderWindow(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Game", sf::Style::Fullscreen);
 	this->window->setFramerateLimit(60);
 	this->window->setVerticalSyncEnabled(false);
 }
@@ -30,7 +30,7 @@ void Game::initGUI()
 
 	// Initialise lost game text
 	this->lostText.setFont(this->font);
-	this->lostText.setString("YOU LOST!!!");
+	this->lostText.setString("YOU GAME ENDED!!!");
 	this->lostText.setCharacterSize(160);
 	this->lostText.setPosition(
 		sf::Vector2f(
@@ -249,7 +249,7 @@ void Game::updateGUI()
 
 	ss << "Scrap: " << this->scrap;
 
-	ssp2 << "Final Score: " << this->scrap << " scrap";
+	ssp2 << "Your Final Score: " << this->scrap;
 
 	this->scrapText.setString(ss.str());
 
