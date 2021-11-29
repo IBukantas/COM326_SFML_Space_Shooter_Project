@@ -21,7 +21,8 @@ private:
 	int speed;
 	int damage;
 	int scrap;
-	int lastType;
+	int maxValue;
+	int leftValue;
 
 	
 	// Private functions
@@ -30,7 +31,7 @@ private:
 
 public:
 	// Constructors / Deconstructors
-	Enemy(float pos_x, float pos_y);
+	Enemy(float pos_x, float pos_y, int _type);
 	virtual ~Enemy();
 
 	// Accessors
@@ -40,12 +41,10 @@ public:
 	const int& getHP() const;
 
 	// Modifiers
-	void setType(const int _type);
 	void loseHP(const int value);
 
 	// Functions
 	void update();
-	void updateStats();
 	void render(sf::RenderTarget* target);
 
 };
