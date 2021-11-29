@@ -30,7 +30,7 @@ void Game::initGUI()
 
 	// Initialise lost game text
 	this->lostText.setFont(this->font);
-	this->lostText.setString("YOU GAME ENDED!!!");
+	this->lostText.setString("YOU LOST!!!");
 	this->lostText.setCharacterSize(160);
 	this->lostText.setPosition(
 		sf::Vector2f(
@@ -108,7 +108,8 @@ void Game::initPlayer()
 
 void Game::initEnemies()
 {
-	this->spawnTimerMax = 25.f;
+	this->currentType = 0;
+	this->spawnTimerMax = 40.f;
 	this->spawnTimer = this->spawnTimerMax;
 }
 
@@ -248,7 +249,7 @@ void Game::updateGUI()
 
 	ss << "Scrap: " << this->scrap;
 
-	ssp2 << "Your Final Score: " << this->scrap << " scrap";
+	ssp2 << "Final Score: " << this->scrap << " scrap";
 
 	this->scrapText.setString(ss.str());
 
@@ -327,35 +328,9 @@ void Game::updateEnemies()
 	// Spawning
 	this->spawnTimer += 0.5f;
 
-	if (this->scrap >= 100 && this->currentType == 0)
-	{
-		this->spawnTimerMax -= 5;
-		this->currentType = 1;
-	}
-	else if (this->scrap >= 200 && this->currentType == 1)
-	{
-		this->spawnTimerMax -= 5;
-		this->currentType = 2;
-	}
-	else if (this->scrap >= 400 && this->currentType == 2)
-	{
-		this->spawnTimerMax -= 5;
-		this->currentType = 3;
-	}
-	else if (this->scrap >= 700 && this->currentType == 3)
-	{
-		this->spawnTimerMax -= 3;
-		this->currentType = 4;
-	}
-	else if (this->scrap >= 1000 && this->currentType == 4)
-	{
-		this->spawnTimerMax -= 2;
-		this->currentType = 5;
-	}
-
 	if (this->spawnTimer >= this->spawnTimerMax)
 	{
-		this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, -100.f, this->currentType));
+		this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, -300.f));
 
 		this->spawnTimer = 0.f;
 	}
@@ -408,6 +383,14 @@ void Game::updateEnemies()
 			this->enemies.erase(this->enemies.begin() + counter);
 			--counter;
 		}
+
+		/*
+		if (this->scrap > 100 && this->currentType < 1)
+		{
+			this->currentType = 1;
+			enemy->setType(currentType);
+		}
+		*/
 
 		++counter;
 
