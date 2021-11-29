@@ -22,11 +22,40 @@ void Game::initGUI()
 		std::cout << "ERROR::GAME::Failed to load font" << "\n";
 	}
 
-	// Initialise point text
+	// Initialise scrap text
+	this->scrapText.setPosition(sf::Vector2f(20.f, 50.f));
 	this->scrapText.setFont(this->font);
 	this->scrapText.setCharacterSize(24);
 	this->scrapText.setFillColor(sf::Color::White);
-	this->scrapText.setString("Scrap:");
+
+	// Initialise lost game text
+	this->lostText.setFont(this->font);
+	this->lostText.setString("YOU LOST!!!");
+	this->lostText.setCharacterSize(160);
+	this->lostText.setPosition(
+		sf::Vector2f(
+			sf::VideoMode::getDesktopMode().width / 2 - this->lostText.getGlobalBounds().width / 2,
+			sf::VideoMode::getDesktopMode().height / 2 - this->lostText.getGlobalBounds().height * 2
+		));
+	this->lostText.setFillColor(sf::Color::Transparent);
+
+	// Initialise final score text
+	this->scoreText.setFont(this->font);
+	this->scoreText.setCharacterSize(80);
+	this->scoreText.setFillColor(sf::Color::Transparent);
+
+	// Initialise Player GUI
+	this->playerHPBar.setSize(sf::Vector2f(400.f, 20.f));
+	this->playerHPBar.setPosition(sf::Vector2f(20.f, 20.f));
+	this->playerHPBar.setOutlineColor(sf::Color(200, 200, 200, 200));
+
+	this->playerHPBarBack = this->playerHPBar;
+
+	this->playerHPBar.setFillColor(sf::Color(196, 39, 27, 250));
+	this->playerHPBarBack.setFillColor(sf::Color(100, 100, 100, 150));
+	this->playerHPBarBack.setOutlineThickness(2.f);
+
+
 }
 
 void Game::initWorld()
@@ -41,7 +70,7 @@ void Game::initWorld()
 
 void Game::initSystems()
 {
-	this->scrap = 0;
+	this->scrap = 10;
 }
 
 void Game::initPlayer()
@@ -52,7 +81,7 @@ void Game::initPlayer()
 void Game::initEnemies()
 {
 	this->currentType = 0;
-	this->spawnTimerMax = 20.f;
+	this->spawnTimerMax = 40.f;
 	this->spawnTimer = this->spawnTimerMax;
 }
 
@@ -143,23 +172,67 @@ void Game::updateInput()
 		this->player->move(0, 1.f);
 	}
 
+	// When "Space Bar" is pressed convert scrap to health
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->player->getPlayerHealth() < this->player->getMaxHealth() - 1 && this->scrap > 1)
+	{
+		this->player->loseHealth(-1);
+
+		this->scrap -= 2;
+	}
+
 	// Update mouse position
 	this->updateMousePositions();
 
 	// When left mouse button is pressed create new bullet
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->player->canAttack())
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->player->canAttack() && scrap > 0)
 	{
 		this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y, 0.f, -1.f, 15.f));
+
+		this->scrap--;
+	}
+
+	// When right mouse button is pressed convert health to scrap
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && this->player->getPlayerHealth() > 0)
+	{
+		this->scrap += 2;
+
+		this->player->loseHealth(1);
 	}
 }
 
 void Game::updateGUI()
 {
 	std::stringstream ss;
+	std::stringstream ssp2;
 
 	ss << "Scrap: " << this->scrap;
 
+	ssp2 << "Final Score: " << this->scrap << " scrap";
+
 	this->scrapText.setString(ss.str());
+
+	this->scoreText.setString(ssp2.str());
+
+	this->scoreText.setPosition(
+		sf::Vector2f(
+			this->lostText.getGlobalBounds().left + 40.f,
+			sf::VideoMode::getDesktopMode().height / 2
+		));
+
+	// Update Health Bar to match player's health
+	if (this->playerHPBar.getSize().x > 0.f)
+	{
+		this->playerHPBar.setSize(sf::Vector2f(static_cast<float>(this->player->getPlayerHealth() * 20), 20.f));
+	}
+	else
+	{
+
+		this->lostText.setFillColor(sf::Color::White);
+
+		this->scoreText.setFillColor(sf::Color::White);
+	}
+
+
 }
 
 void Game::updateWorld()
@@ -255,6 +328,16 @@ void Game::updateEnemies()
 		// Enemy culling (player contact)
 		if (enemy->getBounds().intersects(this->player->getBounds()))
 		{
+			// Take away player health equal to enemy damage
+			if (this->player->getPlayerHealth() >= enemy->getDamage())
+			{
+				this->player->loseHealth(enemy->getDamage());
+			}
+			else
+			{
+				this->player->setHealth(0);
+			}
+
 			// Delete enemy
 			delete this->enemies.at(counter);
 			this->enemies.erase(this->enemies.begin() + counter);
@@ -277,7 +360,7 @@ void Game::updateEnemies()
 
 void Game::updateEnemyType()
 {
-	
+
 }
 
 void Game::updateCombat()
@@ -290,10 +373,17 @@ void Game::updateCombat()
 		{
 			if (this->enemies[i]->getBounds().intersects(this->bullets[k]->getBounds()))
 			{
-				this->scrap += this->enemies[i]->getScrap();
 
-				delete this->enemies[i];
-				this->enemies.erase(this->enemies.begin() + i);
+				if (this->enemies[i]->getHP() <= 0)
+				{
+					this->scrap += this->enemies[i]->getScrap();
+					delete this->enemies[i];
+					this->enemies.erase(this->enemies.begin() + i);
+				}
+				else
+				{
+					this->enemies[i]->loseHP(this->player->getAttackDamage());
+				}
 
 				delete this->bullets[k];
 				this->bullets.erase(this->bullets.begin() + k);
@@ -306,32 +396,44 @@ void Game::updateCombat()
 
 void Game::update()
 {
-	// TODO: Update player velocity
-
-
 	this->updatePollEvents();
-	this->updateInput();
 
-	this->updateWorld();
+	if (this->playerHPBar.getSize().x > 0)
+	{
+		this->updateInput();
 
-	this->updateEnemyType();
+		this->updateWorld();
 
-	this->player->update();
+		this->updateEnemyType();
 
-	this->updateCollision();
+		this->player->update();
 
-	this->updateBullets();
+		this->updateCollision();
 
-	this->updateEnemies();
-		
-	this->updateCombat();
+		this->updateBullets();
+
+		this->updateEnemies();
+
+		this->updateCombat();
+	}
+
 
 	this->updateGUI();
 }
 
 void Game::renderGUI()
 {
-	this->window->draw(this->scrapText);
+	if (this->playerHPBar.getSize().x > 0)
+	{
+		this->window->draw(this->scrapText);
+
+		this->window->draw(this->playerHPBarBack);
+		this->window->draw(this->playerHPBar);
+	}
+
+	this->window->draw(this->lostText);
+
+	this->window->draw(this->scoreText);
 }
 
 void Game::renderWorld()
@@ -344,25 +446,26 @@ void Game::render()
 	// Clear last frame
 	this->window->clear();
 
-	// Draw world background
-	this->renderWorld();
-
-	// Draw all the objects
-	for (auto* bullet : this->bullets)
+	if (this->playerHPBar.getSize().x > 0)
 	{
-		bullet->render(this->window);
-	}
+		// Draw world background
+		this->renderWorld();
 
-	for (auto* enemy : this->enemies)
-	{
-		enemy->render(this->window);
-	}
+		// Draw all the objects
+		for (auto* bullet : this->bullets)
+		{
+			bullet->render(this->window);
+		}
 
-	this->player->render(*this->window);
+		for (auto* enemy : this->enemies)
+		{
+			enemy->render(this->window);
+		}
+
+		this->player->render(*this->window);
+	}
 
 	this->renderGUI();
-
-	
 
 	// Show new frame
 	this->window->display();

@@ -26,6 +26,8 @@ private:
 	//GUI
 	sf::Font font;
 	sf::Text scrapText;
+	sf::Text lostText;
+	sf::Text scoreText;
 
 	// World
 	sf::Texture worldBackgroundTex;
@@ -37,6 +39,10 @@ private:
 
 	// Player
 	Player* player;
+
+	// Player GUI
+	sf::RectangleShape playerHPBar;
+	sf::RectangleShape playerHPBarBack;
 
 	// Enemy
 	float spawnTimer;

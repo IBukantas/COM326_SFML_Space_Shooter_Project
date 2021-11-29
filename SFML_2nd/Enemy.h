@@ -36,9 +36,12 @@ public:
 	// Accessors
 	const sf::FloatRect getBounds() const;
 	const int& getScrap() const;
+	const int& getDamage() const;
+	const int& getHP() const;
 
 	// Modifiers
 	void setType(const int _type);
+	void loseHP(const int value);
 
 	// Functions
 	void update();

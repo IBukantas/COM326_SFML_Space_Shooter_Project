@@ -2,12 +2,12 @@
 
 void Enemy::initVariables()
 {
-	this->pointCount = rand() % 4 + 3;	// min = 3 max = 6
-	this->speed = rand() % 6 + 5;	// min = 5 max = 10
-	this->hpMax = rand() % 21 + 20; // min = 20 max = 40
+	this->pointCount = rand() % 3 + 3;	// min = 3 max = 5
+	this->speed = rand() % 4 + 2;	// min = 2 max = 5
+	this->hpMax = rand() % 11 + 5; // min = 5 max = 15
 	this->hp = this->hpMax;
 	this->damage = this->pointCount;
-	this->scrap = (this->pointCount + this->speed + this->hpMax / 3) / 2;
+	this->scrap = (this->pointCount + this->speed + this->hpMax / 2) / 2;
 	this->lastType = 0;
 	std::cout << "Enemy worth: " << scrap << " scrap" << std::endl;
 }
@@ -15,7 +15,7 @@ void Enemy::initVariables()
 void Enemy::initShape()
 {
 	// Create the shape of the enemy
-	this->shape.setRadius(this->hpMax);
+	this->shape.setRadius(this->pointCount * 10);
 	this->shape.setPointCount(this->pointCount);
 	this->shape.setFillColor(sf::Color(rand() % 255 + 1, rand() % 255 + 1, rand() % 255 + 1, 255));
 }
@@ -44,9 +44,24 @@ const int& Enemy::getScrap() const
 	return this->scrap;
 }
 
+const int& Enemy::getDamage() const
+{
+	return this->damage;
+}
+
+const int& Enemy::getHP() const
+{
+	return this->hp;
+}
+
 void Enemy::setType(const int _type)
 {
 	this->type = _type;
+}
+
+void Enemy::loseHP(const int value)
+{
+	this->hp -= value;
 }
 
 // Functions

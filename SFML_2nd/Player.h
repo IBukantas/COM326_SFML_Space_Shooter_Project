@@ -15,7 +15,13 @@ private:
 
 	// Variables
 	float movementSpeed;
+
+	int maxHealth;
 	int playerHealth;
+
+	int playerSize;
+
+	int attackDamage;
 
 	float attackCooldown;
 	float attackCooldownMax;
@@ -32,10 +38,15 @@ public:
 	// Accessors
 	const sf::Vector2f& getPos() const;
 	const sf::FloatRect getBounds() const;
+	const int& getMaxHealth() const;
+	const int& getPlayerHealth() const;
+	const int& getAttackDamage() const;
 
 	// Modifiers
 	void setPosition(const float x, const float y);
 	void setRadius(const float r);
+	void setHealth(const int health);
+	void loseHealth(const int value);
 
 
 	// Functions
