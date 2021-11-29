@@ -51,11 +51,32 @@ void Game::initGUI()
 
 	this->playerHPBarBack = this->playerHPBar;
 
-	this->playerHPBar.setFillColor(sf::Color(196, 39, 27, 250));
+	this->playerHPBar.setFillColor(sf::Color(196, 39, 27, 240));
 	this->playerHPBarBack.setFillColor(sf::Color(100, 100, 100, 150));
 	this->playerHPBarBack.setOutlineThickness(2.f);
 
+	// Initialise show controls text
+	this->showText.setFont(this->font);
+	this->showText.setCharacterSize(36);
+	this->showText.setString("Press 'P' to pause game");
+	this->showText.setOrigin(this->showText.getGlobalBounds().width, this->showText.getGlobalBounds().height);
+	this->showText.setPosition(sf::Vector2f(sf::VideoMode::getDesktopMode().width - 20, sf::VideoMode::getDesktopMode().height - 20));
+	this->showText.setFillColor(sf::Color::White);
 
+	// Initialise control instruction text
+	this->controlsText.setFont(this->font);
+	this->controlsText.setCharacterSize(24);
+	this->controlsText.setString("Controls:\nPress 'W' to move up\nPress 'S' to move down\nPress 'A' to move left\nPress 'D' to move right\nLeft mouse button will shoot pellot - Use this to destroy enemies!\nRight mouse button will turn your health into scrap/pellots - Usefull if you run out of scrap! *But can kill you if health runs out*\nPress space bar to convert scrap into health - This one's a real life saver!\n\nPress 'P' to start/pause the game\n\nPress 'Escape' to quit the game window");
+	this->controlsText.setPosition(sf::Vector2f(sf::VideoMode::getDesktopMode().width / 2 - this->controlsText.getGlobalBounds().width / 2, sf::VideoMode::getDesktopMode().height / 2 - this->controlsText.getGlobalBounds().height / 2));
+	this->controlsText.setFillColor(sf::Color::White);
+
+	// Initialise quit window text
+	this->quitText.setFont(this->font);
+	this->quitText.setCharacterSize(36);
+	this->quitText.setString("Press 'Escape' to quit game");
+	this->quitText.setOrigin(this->quitText.getGlobalBounds().width, this->quitText.getGlobalBounds().height);
+	this->quitText.setPosition(sf::Vector2f(sf::VideoMode::getDesktopMode().width - 20, sf::VideoMode::getDesktopMode().height - 20));
+	this->quitText.setFillColor(sf::Color::White);
 }
 
 void Game::initWorld()
@@ -70,7 +91,14 @@ void Game::initWorld()
 
 void Game::initSystems()
 {
+	// Initialise paused variable at start of game
+	this->paused = true;
+
+	// Initialise player's scrap at start of game
 	this->scrap = 10;
+
+	// Initialise difficulty type at start of game
+	this->currentType = 0;
 }
 
 void Game::initPlayer()
@@ -145,9 +173,23 @@ void Game::updatePollEvents()
 	sf::Event e;
 	while (this->window->pollEvent(e))
 	{
-		if (e.Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape)
+		// When "Escape" is pressed end game
+		if (e.type == sf::Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape)
 		{
 			this->window->close();
+		}
+
+		// When "P" is pressed pause game
+		if (e.type == sf::Event::KeyReleased && e.Event::key.code == sf::Keyboard::P)
+		{
+			if (this->paused == true)
+			{
+				this->paused = false;
+			}
+			else
+			{
+				this->paused = true;
+			}
 		}
 	}
 }
@@ -231,8 +273,6 @@ void Game::updateGUI()
 
 		this->scoreText.setFillColor(sf::Color::White);
 	}
-
-
 }
 
 void Game::updateWorld()
@@ -398,42 +438,58 @@ void Game::update()
 {
 	this->updatePollEvents();
 
-	if (this->playerHPBar.getSize().x > 0)
+	if (this->paused == false)
 	{
-		this->updateInput();
+		if (this->playerHPBar.getSize().x > 0)
+		{
+			this->updateInput();
 
-		this->updateWorld();
+			this->updateWorld();
 
-		this->updateEnemyType();
+			this->updateEnemyType();
 
-		this->player->update();
+			this->player->update();
 
-		this->updateCollision();
+			this->updateCollision();
 
-		this->updateBullets();
+			this->updateBullets();
 
-		this->updateEnemies();
+			this->updateEnemies();
 
-		this->updateCombat();
+			this->updateCombat();
+		}
 	}
-
 
 	this->updateGUI();
 }
 
 void Game::renderGUI()
 {
-	if (this->playerHPBar.getSize().x > 0)
+	if (this->paused == true)
 	{
-		this->window->draw(this->scrapText);
-
-		this->window->draw(this->playerHPBarBack);
-		this->window->draw(this->playerHPBar);
+		this->window->draw(this->controlsText);
 	}
+	else
+	{
+		if (this->playerHPBar.getSize().x > 0)
+		{
+			this->window->draw(this->scrapText);
 
-	this->window->draw(this->lostText);
+			this->window->draw(this->playerHPBarBack);
+			this->window->draw(this->playerHPBar);
 
-	this->window->draw(this->scoreText);
+			this->window->draw(this->showText);
+		}
+		else
+		{
+			this->window->draw(this->lostText);
+
+			this->window->draw(this->scoreText);
+
+			this->window->draw(this->quitText);
+		}
+	}
+	
 }
 
 void Game::renderWorld()
@@ -446,23 +502,26 @@ void Game::render()
 	// Clear last frame
 	this->window->clear();
 
-	if (this->playerHPBar.getSize().x > 0)
+	if (this->paused == false)
 	{
-		// Draw world background
-		this->renderWorld();
-
-		// Draw all the objects
-		for (auto* bullet : this->bullets)
+		if (this->playerHPBar.getSize().x > 0)
 		{
-			bullet->render(this->window);
-		}
+			// Draw world background
+			this->renderWorld();
 
-		for (auto* enemy : this->enemies)
-		{
-			enemy->render(this->window);
-		}
+			// Draw all the objects
+			for (auto* bullet : this->bullets)
+			{
+				bullet->render(this->window);
+			}
 
-		this->player->render(*this->window);
+			for (auto* enemy : this->enemies)
+			{
+				enemy->render(this->window);
+			}
+
+			this->player->render(*this->window);
+		}
 	}
 
 	this->renderGUI();

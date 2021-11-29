@@ -28,12 +28,16 @@ private:
 	sf::Text scrapText;
 	sf::Text lostText;
 	sf::Text scoreText;
+	sf::Text showText;
+	sf::Text controlsText;
+	sf::Text quitText;
 
 	// World
 	sf::Texture worldBackgroundTex;
 	sf::Sprite worldBackground;
 
 	// Systems
+	bool paused;
 	unsigned scrap;
 	unsigned currentType;
 
