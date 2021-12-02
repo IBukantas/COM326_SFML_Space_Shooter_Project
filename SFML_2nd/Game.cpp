@@ -3,7 +3,7 @@
 // Private functions
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Run, Gun, Robot", sf::Style::Fullscreen);
+	this->window = new sf::RenderWindow(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Game", sf::Style::Fullscreen);
 	this->window->setFramerateLimit(60);
 	this->window->setVerticalSyncEnabled(false);
 }
@@ -30,7 +30,7 @@ void Game::initGUI()
 
 	// Initialise lost game text
 	this->lostText.setFont(this->font);
-	this->lostText.setString("YOU LOST!!!");
+	this->lostText.setString("YOU GAME ENDED!!!");
 	this->lostText.setCharacterSize(160);
 	this->lostText.setPosition(
 		sf::Vector2f(
@@ -66,7 +66,7 @@ void Game::initGUI()
 	// Initialise control instruction text
 	this->controlsText.setFont(this->font);
 	this->controlsText.setCharacterSize(24);
-	this->controlsText.setString("Controls:\nPress 'W' to move up\nPress 'S' to move down\nPress 'A' to move left\nPress 'D' to move right\nLeft mouse button will shoot pellot - Use this to destroy enemies!\nRight mouse button will turn your health into scrap/pellots - Usefull if you run out of scrap! *But can kill you if health runs out*\nPress space bar to convert scrap into health - This one's a real life saver!\n\nPress 'P' to start/pause the game\n\nPress 'Escape' to quit the game window");
+	this->controlsText.setString("Controls:\nPress 'W' to move up\nPress 'S' to move down\nPress 'A' to move left\nPress 'D' to move right\nLeft mouse button will shoot pellot - Use this to destroy enemies!\nRight mouse button will turn your health into scrap/pellots - Useful if you run out of scrap! *But can kill you if health runs out*\nPress space bar to convert scrap into health - This one's a real life saver!\n\nPress 'P' to start/pause the game\n\nPress 'Escape' to quit the game window");
 	this->controlsText.setPosition(sf::Vector2f(sf::VideoMode::getDesktopMode().width / 2 - this->controlsText.getGlobalBounds().width / 2, sf::VideoMode::getDesktopMode().height / 2 - this->controlsText.getGlobalBounds().height / 2));
 	this->controlsText.setFillColor(sf::Color::White);
 
@@ -109,7 +109,7 @@ void Game::initPlayer()
 void Game::initEnemies()
 {
 	this->currentType = 0;
-	this->spawnTimerMax = 40.f;
+	this->spawnTimerMax = 25.f;
 	this->spawnTimer = this->spawnTimerMax;
 }
 
@@ -249,7 +249,7 @@ void Game::updateGUI()
 
 	ss << "Scrap: " << this->scrap;
 
-	ssp2 << "Final Score: " << this->scrap << " scrap";
+	ssp2 << "Your Final Score: " << this->scrap;
 
 	this->scrapText.setString(ss.str());
 
@@ -328,9 +328,35 @@ void Game::updateEnemies()
 	// Spawning
 	this->spawnTimer += 0.5f;
 
+	if (this->scrap > 100 && this->currentType == 0)
+	{
+		this->spawnTimerMax -= 5;
+		this->currentType++;
+	}
+	else if (this->scrap > 300 && this->currentType == 1)
+	{
+		this->spawnTimerMax -= 5;
+		this->currentType++;
+	}
+	else if (this->scrap > 500 && this->currentType == 2)
+	{
+		this->spawnTimerMax -= 5;
+		this->currentType++;
+	}
+	else if (this->scrap > 700 && this->currentType == 3)
+	{
+		this->spawnTimerMax -= 5;
+		this->currentType++;
+	}
+	else if (this->scrap > 1000 && this->currentType == 4)
+	{
+		this->spawnTimerMax -= 2;
+		this->currentType++;
+	}
+
 	if (this->spawnTimer >= this->spawnTimerMax)
 	{
-		this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, -300.f));
+		this->enemies.push_back(new Enemy(rand() % this->window->getSize().x, -300.f, this->currentType));
 
 		this->spawnTimer = 0.f;
 	}
