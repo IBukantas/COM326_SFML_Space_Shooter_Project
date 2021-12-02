@@ -333,22 +333,22 @@ void Game::updateEnemies()
 		this->spawnTimerMax -= 5;
 		this->currentType++;
 	}
-	else if (this->scrap > 300 && this->currentType == 1)
+	else if (this->scrap > 200 && this->currentType == 1)
 	{
 		this->spawnTimerMax -= 5;
 		this->currentType++;
 	}
-	else if (this->scrap > 500 && this->currentType == 2)
+	else if (this->scrap > 400 && this->currentType == 2)
 	{
 		this->spawnTimerMax -= 5;
 		this->currentType++;
 	}
-	else if (this->scrap > 700 && this->currentType == 3)
+	else if (this->scrap > 800 && this->currentType == 3)
 	{
 		this->spawnTimerMax -= 5;
 		this->currentType++;
 	}
-	else if (this->scrap > 1000 && this->currentType == 4)
+	else if (this->scrap > 1500 && this->currentType == 4)
 	{
 		this->spawnTimerMax -= 2;
 		this->currentType++;

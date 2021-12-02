@@ -12,26 +12,26 @@ void Enemy::initVariables()
 		this->hp = this->hpMax;
 		this->damage = this->pointCount;
 		this->scrap = this->pointCount + this->speed + this->hpMax / 2;
-		this->leftValue = this->leftValue * 8 - this->speed * 2;
+		this->leftValue = this->leftValue * 16 - this->speed;
 		std::cout << "Enemy worth: " << scrap << " scrap" << std::endl;
 	}
 	else if (this->type == 1)
 	{
-		this->maxValue = 11;
-		this->pointCount = (rand() % 4 + 3);	// max = 6
+		this->maxValue = 10;
+		this->pointCount = (rand() % 3 + 3);	// max = 5
 		this->speed = (rand() % 4 + 1);						// max = 3
 		this->leftValue = this->maxValue - this->speed;
 		this->hpMax = this->leftValue;
 		this->hp = this->hpMax;
 		this->damage = this->pointCount;
 		this->scrap = this->pointCount + this->speed + this->hpMax / 2;
-		this->leftValue = this->leftValue * 8 - this->speed * 2;
+		this->leftValue = this->leftValue * 12 - this->speed * 2;
 		std::cout << "Enemy worth: " << scrap << " scrap" << std::endl;
 	}
 	else if (this->type == 2)
 	{
-		this->maxValue = 22;
-		this->pointCount = (rand() % 4 + 4);	// max = 7
+		this->maxValue = 20;
+		this->pointCount = (rand() % 4 + 3);	// max = 6
 		this->speed = (rand() % 6 + 1);						// max = 3
 		this->leftValue = this->maxValue - this->speed;
 		this->hpMax = this->leftValue;
@@ -43,41 +43,41 @@ void Enemy::initVariables()
 	}
 	else if (this->type == 3)
 	{
-		this->maxValue = 33;
-		this->pointCount = (rand() % 5 + 4);	// max = 8
+		this->maxValue = 20;
+		this->pointCount = (rand() % 4 + 4);	// max = 7
 		this->speed = (rand() % 8 + 1);						// max = 3
 		this->leftValue = this->maxValue - this->speed;
 		this->hpMax = this->leftValue;
 		this->hp = this->hpMax;
 		this->damage = this->pointCount;
 		this->scrap = this->pointCount + this->speed + this->hpMax / 2;
-		this->leftValue = this->leftValue * 2 - this->speed * 2;
+		this->leftValue = this->leftValue * 5 - this->speed * 2;
 		std::cout << "Enemy worth: " << scrap << " scrap" << std::endl;
 	}
 	else if (this->type == 4)
 	{
-		this->maxValue = 55;
-		this->pointCount = (rand() % 6 + 5);	// max = 10
+		this->maxValue = 30;
+		this->pointCount = (rand() % 5 + 4);	// max = 8
 		this->speed = (rand() % 10 + 1);						// max = 3
 		this->leftValue = this->maxValue - this->speed;
 		this->hpMax = this->leftValue;
 		this->hp = this->hpMax;
 		this->damage = this->pointCount;
 		this->scrap = this->pointCount + this->speed + this->hpMax / 2;
-		this->leftValue = this->leftValue - this->speed * 2;
+		this->leftValue = this->leftValue * 3 - this->speed * 2;
 		std::cout << "Enemy worth: " << scrap << " scrap" << std::endl;
 	}
 	else if (this->type == 5)
 	{
-		this->maxValue = 77;
-		this->pointCount = (rand() % 10 + 6);	// max = 15
+		this->maxValue = 30;
+		this->pointCount = (rand() % 6 + 5);	// max = 10
 		this->speed = (rand() % 12 + 1);						// max = 3
 		this->leftValue = this->maxValue - this->speed;
 		this->hpMax = this->leftValue;
 		this->hp = this->hpMax;
 		this->damage = this->pointCount;
 		this->scrap = this->pointCount + this->speed + this->hpMax / 2;
-		this->leftValue = this->leftValue - this->speed * 4;
+		this->leftValue = this->leftValue * 2 - this->speed;
 		std::cout << "Enemy worth: " << scrap << " scrap" << std::endl;
 	}
 }
