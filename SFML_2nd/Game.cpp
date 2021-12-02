@@ -66,7 +66,7 @@ void Game::initGUI()
 	// Initialise control instruction text
 	this->controlsText.setFont(this->font);
 	this->controlsText.setCharacterSize(24);
-	this->controlsText.setString("Controls:\nPress 'W' to move up\nPress 'S' to move down\nPress 'A' to move left\nPress 'D' to move right\nLeft mouse button will shoot pellot - Use this to destroy enemies!\nRight mouse button will turn your health into scrap/pellots - Usefull if you run out of scrap! *But can kill you if health runs out*\nPress space bar to convert scrap into health - This one's a real life saver!\n\nPress 'P' to start/pause the game\n\nPress 'Escape' to quit the game window");
+	this->controlsText.setString("Controls:\nPress 'W' to move up\nPress 'S' to move down\nPress 'A' to move left\nPress 'D' to move right\nLeft mouse button will shoot pellot - Use this to destroy enemies!\nRight mouse button will turn your health into scrap/pellots - Useful if you run out of scrap! *But can kill you if health runs out*\nPress space bar to convert scrap into health - This one's a real life saver!\n\nPress 'P' to start/pause the game\n\nPress 'Escape' to quit the game window");
 	this->controlsText.setPosition(sf::Vector2f(sf::VideoMode::getDesktopMode().width / 2 - this->controlsText.getGlobalBounds().width / 2, sf::VideoMode::getDesktopMode().height / 2 - this->controlsText.getGlobalBounds().height / 2));
 	this->controlsText.setFillColor(sf::Color::White);
 
