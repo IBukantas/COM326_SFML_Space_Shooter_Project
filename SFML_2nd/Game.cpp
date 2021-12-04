@@ -117,8 +117,12 @@ void Game::initMusic()
 {
 	if (!musicBackground.openFromFile(".\\audio\\background_song.ogg"))
 	{
-		std::cout << "ERROR::GAME::Failed to load font" << "\n";
+		std::cout << "ERROR::GAME::Failed to load background music" << "\n";
 	}
+
+	this->musicBackground.play();
+	this->musicBackground.setVolume(1);
+	this->musicBackground.setLoop(true);
 }
 
 // Constructors / Deconstructors
@@ -131,6 +135,7 @@ Game::Game()
 	this->initSystems();
 	this->initPlayer();
 	this->initEnemies();
+	this->initMusic();
 }
 
 Game::~Game()

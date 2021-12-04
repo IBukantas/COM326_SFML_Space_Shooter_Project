@@ -56,6 +56,9 @@ private:
 	// Music
 	sf::Music musicBackground;
 
+	// Sounds
+
+
 	// Mouse positions
 	sf::Vector2i mousePosWindow;
 
