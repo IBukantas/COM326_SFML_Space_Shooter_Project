@@ -113,6 +113,14 @@ void Game::initEnemies()
 	this->spawnTimer = this->spawnTimerMax;
 }
 
+void Game::initMusic()
+{
+	if (!musicBackground.openFromFile(".\\audio\\background_song.ogg"))
+	{
+		std::cout << "ERROR::GAME::Failed to load font" << "\n";
+	}
+}
+
 // Constructors / Deconstructors
 Game::Game()
 {

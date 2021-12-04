@@ -53,6 +53,9 @@ private:
 	float spawnTimerMax;
 	std::vector<Enemy*> enemies;
 
+	// Music
+	sf::Music musicBackground;
+
 	// Mouse positions
 	sf::Vector2i mousePosWindow;
 
@@ -65,6 +68,7 @@ private:
 
 	void initPlayer();
 	void initEnemies();
+	void initMusic();
 
 public:
 	// Constructors / Deconstructors
