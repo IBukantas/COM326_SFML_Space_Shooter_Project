@@ -55,6 +55,7 @@ private:
 
 	// Music
 	sf::Music musicBackground;
+	float gameVolume;
 
 	// Sounds
 

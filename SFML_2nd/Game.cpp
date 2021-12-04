@@ -121,9 +121,12 @@ void Game::initMusic()
 	}
 
 	this->musicBackground.play();
-	this->musicBackground.setVolume(1);
+	this->gameVolume = 10.f;
+	this->musicBackground.setVolume(this->gameVolume);
 	this->musicBackground.setLoop(true);
 }
+
+
 
 // Constructors / Deconstructors
 Game::Game()
@@ -204,6 +207,19 @@ void Game::updatePollEvents()
 				this->paused = true;
 			}
 		}
+
+		// Adjust volume
+		if (e.type == sf::Event::KeyPressed && e.Event::key.code == sf::Keyboard::Add)
+		{
+			this->gameVolume += 10.f;
+			this->musicBackground.setVolume(this->gameVolume);
+		}
+
+		if (e.type == sf::Event::KeyPressed && e.Event::key.code == sf::Keyboard::Subtract)
+		{
+			this->gameVolume -= 10.f;
+			this->musicBackground.setVolume(this->gameVolume);
+		}
 	}
 }
 
@@ -253,6 +269,8 @@ void Game::updateInput()
 
 		this->player->loseHealth(1);
 	}
+
+	
 }
 
 void Game::updateGUI()
