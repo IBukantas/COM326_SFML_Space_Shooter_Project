@@ -15,7 +15,6 @@ int main()
     // End of application
     return 0;
 
-    //bepis
 
     /*
     // Create the main window
