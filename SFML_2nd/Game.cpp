@@ -30,7 +30,7 @@ void Game::initGUI()
 
 	// Initialise lost game text
 	this->lostText.setFont(this->font);
-	this->lostText.setString("YOU GOT GAME ENDED!!!");
+	this->lostText.setString("YOU GAME ENDED!!!");
 	this->lostText.setCharacterSize(160);
 	this->lostText.setPosition(
 		sf::Vector2f(
@@ -66,7 +66,7 @@ void Game::initGUI()
 	// Initialise control instruction text
 	this->controlsText.setFont(this->font);
 	this->controlsText.setCharacterSize(24);
-	this->controlsText.setString("Controls:\nPress 'W' to move up\nPress 'S' to move down\nPress 'A' to move left\nPress 'D' to move right\nLeft mouse button will shoot pellot - Use this to destroy enemies!\nRight mouse button will turn your health into scrap/pellots - Useful if you run out of scrap! *But can kill you if health runs out*\nPress space bar to convert scrap into health - This one's a real life saver!\nPress '-' to lower volume and '+' to increase volume\n\nPress 'P' to start/pause the game\n\nPress 'Escape' to quit the game window");
+	this->controlsText.setString("Controls:\nPress 'W' to move up\nPress 'S' to move down\nPress 'A' to move left\nPress 'D' to move right\nLeft mouse button will shoot pellot - Use this to destroy enemies!\nRight mouse button will turn your health into scrap/pellots - Useful if you run out of scrap! *But can kill you if health runs out*\nPress space bar to convert scrap into health - This one's a real life saver!\nPress '-' to lower music volume and '+' to increase music volume\nPress 'Divide' to lower effect volume and 'Multiply' to increase effect volume\n\nPress 'P' to start/pause the game\n\nPress 'Escape' to quit the game window");
 	this->controlsText.setPosition(sf::Vector2f(sf::VideoMode::getDesktopMode().width / 2 - this->controlsText.getGlobalBounds().width / 2, sf::VideoMode::getDesktopMode().height / 2 - this->controlsText.getGlobalBounds().height / 2));
 	this->controlsText.setFillColor(sf::Color::White);
 
@@ -126,6 +126,33 @@ void Game::initMusic()
 	this->musicBackground.setLoop(true);
 }
 
+void Game::initSounds()
+{
+	if (!bufferGameOver.loadFromFile(".\\audio\\game_over.ogg"))
+	{
+		std::cout << "ERROR::GAME::Failed to load game over sound" << "\n";
+	}
+
+	if (!bufferGunShot.loadFromFile(".\\audio\\gun_shot.ogg"))
+	{
+		std::cout << "ERROR::GAME::Failed to load gun shot sound" << "\n";
+	}
+
+	if (!bufferHitSound.loadFromFile(".\\audio\\hit_sound.ogg"))
+	{
+		std::cout << "ERROR::GAME::Failed to load hit sound" << "\n";
+	}
+
+	if (!bufferKillSound.loadFromFile(".\\audio\\kill_sound.ogg"))
+	{
+		std::cout << "ERROR::GAME::Failed to load kill sound" << "\n";
+	}
+
+	this->effectVolume = 10.f;
+	this->sound.setVolume(this->effectVolume);
+	this->sound2.setVolume(this->effectVolume);
+}
+
 
 
 // Constructors / Deconstructors
@@ -139,6 +166,7 @@ Game::Game()
 	this->initPlayer();
 	this->initEnemies();
 	this->initMusic();
+	this->initSounds();
 }
 
 Game::~Game()
@@ -208,17 +236,32 @@ void Game::updatePollEvents()
 			}
 		}
 
-		// Adjust volume
-		if (e.type == sf::Event::KeyPressed && e.Event::key.code == sf::Keyboard::Add)
+		// Adjust background music volume
+		if (e.type == sf::Event::KeyPressed && e.Event::key.code == sf::Keyboard::Add && this->gameVolume < 100.f)
 		{
 			this->gameVolume += 10.f;
 			this->musicBackground.setVolume(this->gameVolume);
 		}
 
-		if (e.type == sf::Event::KeyPressed && e.Event::key.code == sf::Keyboard::Subtract)
+		if (e.type == sf::Event::KeyPressed && e.Event::key.code == sf::Keyboard::Subtract && this->gameVolume > 0.f)
 		{
 			this->gameVolume -= 10.f;
 			this->musicBackground.setVolume(this->gameVolume);
+		}
+
+		// Adjust sound effect volume
+		if (e.type == sf::Event::KeyPressed && e.Event::key.code == sf::Keyboard::Multiply && this->effectVolume < 100.f)
+		{
+			this->effectVolume += 10.f;
+			this->sound.setVolume(this->effectVolume);
+			this->sound2.setVolume(this->effectVolume);
+		}
+
+		if (e.type == sf::Event::KeyPressed && e.Event::key.code == sf::Keyboard::Divide && this->effectVolume > 0.f)
+		{
+			this->effectVolume -= 10.f;
+			this->sound.setVolume(this->effectVolume);
+			this->sound2.setVolume(this->effectVolume);
 		}
 	}
 }
@@ -258,6 +301,9 @@ void Game::updateInput()
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->player->canAttack() && scrap > 0)
 	{
 		this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y, 0.f, -1.f, 15.f));
+
+		this->sound.setBuffer(bufferGunShot);
+		this->sound.play();
 
 		this->scrap--;
 	}
@@ -428,10 +474,16 @@ void Game::updateEnemies()
 			// Take away player health equal to enemy damage
 			if (this->player->getPlayerHealth() >= enemy->getDamage())
 			{
+				this->sound2.setBuffer(bufferHitSound);
+				this->sound2.play();
+
 				this->player->loseHealth(enemy->getDamage());
 			}
 			else
 			{
+				this->sound.setBuffer(bufferGameOver);
+				this->sound.play();
+				
 				this->player->setHealth(0);
 			}
 
@@ -473,12 +525,17 @@ void Game::updateCombat()
 
 				if (this->enemies[i]->getHP() <= 0)
 				{
+					this->sound.setBuffer(bufferKillSound);
+					this->sound.play();
 					this->scrap += this->enemies[i]->getScrap();
 					delete this->enemies[i];
 					this->enemies.erase(this->enemies.begin() + i);
 				}
 				else
 				{
+					this->sound2.setBuffer(bufferHitSound);
+					this->sound2.play();
+
 					this->enemies[i]->loseHP(this->player->getAttackDamage());
 				}
 
