@@ -19,15 +19,15 @@ void Player::initVariables()
 void Player::initSprite()
 {
 	// load textures of player
-	if (!playerT1.loadFromFile("player1.png"))
+	if (!playerT1.loadFromFile("images/player1.png"))
 	{
 		std::cout << "ERROR::Player::Failed to player Texture 1" << "\n";
 	}
-	if (!playerT2.loadFromFile("player2.png"))
+	if (!playerT2.loadFromFile("images/player2.png"))
 	{
 		std::cout << "ERROR::Player::Failed to player Texture 2" << "\n";
 	}
-	if (!playerT3.loadFromFile("player3.png"))
+	if (!playerT3.loadFromFile("images/player3.png"))
 	{
 		std::cout << "ERROR::Player::Failed to player Texture 3" << "\n";
 	}
