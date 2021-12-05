@@ -33,8 +33,11 @@ private:
 	sf::Text quitText;
 
 	// World
-	sf::Texture worldBackgroundTex;
+	sf::Texture starsBackground;
 	sf::Sprite worldBackground;
+	sf::Texture galaxyBackground;
+	sf::Sprite galaxySprite;
+	float currentRotation;
 
 	// Systems
 	bool paused;
@@ -64,7 +67,9 @@ private:
 	sf::SoundBuffer bufferKillSound;
 	sf::Sound sound;
 	sf::Sound sound2;
+	sf::Sound soundShot;
 	float effectVolume;
+	bool soundPlayed;
 
 	// Mouse positions
 	sf::Vector2i mousePosWindow;
@@ -98,8 +103,8 @@ public:
 	void updateCollision();
 	void updateBullets();
 	void updateEnemies();
-	void updateEnemyType();
 	void updateCombat();
+	void updateSounds();
 	void update();
 	
 	void renderGUI();

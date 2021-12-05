@@ -15,8 +15,7 @@ int main()
     // End of application
     return 0;
 
-    //bepis
-
+    //here
     /*
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");

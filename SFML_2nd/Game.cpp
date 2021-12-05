@@ -81,12 +81,22 @@ void Game::initGUI()
 
 void Game::initWorld()
 {
-	/*if (!this->worldBackgroundTex.loadFromFile("images/background1.jpg"))
+	// loading world background file
+	if (!this->starsBackground.loadFromFile("images/stars_texture.png"))
 	{
-		std::cout << "ERROR::GAME::Could not load background texture" << "\n";
+		std::cout << "ERROR::GAME::Could not load stars background texture" << "\n";
+	}
+	if (!this->galaxyBackground.loadFromFile("images/galaxy.png"))
+	{
+		std::cout << "ERROR::GAME::Could not load Galaxy background texture" << "\n";
 	}
 
-	this->worldBackground.setTexture(this->worldBackgroundTex); */
+	this->worldBackground.setTexture(this->starsBackground);
+	this->galaxySprite.setTexture(this->galaxyBackground);
+
+	this->galaxySprite.setOrigin(this->galaxySprite.getGlobalBounds().width /2, this->galaxySprite.getGlobalBounds().height /2);
+	this->galaxySprite.setPosition(sf::VideoMode::getDesktopMode().width / 2, sf::VideoMode::getDesktopMode().height / 2);
+	
 }
 
 void Game::initSystems()
@@ -99,6 +109,9 @@ void Game::initSystems()
 
 	// Initialise difficulty type at start of game
 	this->currentType = 0;
+
+	// Initialise final game over play check
+	this->soundPlayed = false;
 }
 
 void Game::initPlayer()
@@ -151,6 +164,7 @@ void Game::initSounds()
 	this->effectVolume = 10.f;
 	this->sound.setVolume(this->effectVolume);
 	this->sound2.setVolume(this->effectVolume);
+	this->soundShot.setVolume(this->effectVolume);
 }
 
 
@@ -255,6 +269,7 @@ void Game::updatePollEvents()
 			this->effectVolume += 10.f;
 			this->sound.setVolume(this->effectVolume);
 			this->sound2.setVolume(this->effectVolume);
+			this->soundShot.setVolume(this->effectVolume);
 		}
 
 		if (e.type == sf::Event::KeyPressed && e.Event::key.code == sf::Keyboard::Divide && this->effectVolume > 0.f)
@@ -262,6 +277,7 @@ void Game::updatePollEvents()
 			this->effectVolume -= 10.f;
 			this->sound.setVolume(this->effectVolume);
 			this->sound2.setVolume(this->effectVolume);
+			this->soundShot.setVolume(this->effectVolume);
 		}
 	}
 }
@@ -302,8 +318,8 @@ void Game::updateInput()
 	{
 		this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y, 0.f, -1.f, 15.f));
 
-		this->sound.setBuffer(bufferGunShot);
-		this->sound.play();
+		this->soundShot.setBuffer(bufferGunShot);
+		this->soundShot.play();
 
 		this->scrap--;
 	}
@@ -354,7 +370,8 @@ void Game::updateGUI()
 
 void Game::updateWorld()
 {
-
+	this->currentRotation = this->galaxySprite.getRotation();
+	this->galaxySprite.setRotation(this->currentRotation += 0.01f);
 }
 
 void Game::updateCollision()
@@ -362,20 +379,20 @@ void Game::updateCollision()
 	// left and right world collision
 	if (this->player->getBounds().left < -this->player->getBounds().width / 2)
 	{
-		this->player->setPosition(-this->player->getBounds().width / 2 + (this->player->getBounds().width / 2), this->player->getBounds().top + (this->player->getBounds().height / 2));
+		this->player->setPosition(-this->player->getBounds().width / 2 + (this->player->getBounds().width / 2), this->player->getBounds().top);
 	}
 	else if (this->player->getBounds().left + this->player->getBounds().width > sf::VideoMode::getDesktopMode().width + this->player->getBounds().width / 2)
 	{
-		this->player->setPosition(sf::VideoMode::getDesktopMode().width, this->player->getBounds().top + (this->player->getBounds().height / 2));
+		this->player->setPosition(sf::VideoMode::getDesktopMode().width, this->player->getBounds().top);
 	}
 	// top and bottom world collision
 	if (this->player->getBounds().top < 0.f)
 	{
-		this->player->setPosition(this->player->getBounds().left + this->player->getBounds().width / 2, this->player->getBounds().height / 2);
+		this->player->setPosition(this->player->getBounds().left + this->player->getBounds().width / 2, 0);
 	}
 	else if (this->player->getBounds().top + this->player->getBounds().height / 2 > sf::VideoMode::getDesktopMode().height)
 	{
-		this->player->setPosition(this->player->getBounds().left + this->player->getBounds().width / 2, sf::VideoMode::getDesktopMode().height);
+		this->player->setPosition(this->player->getBounds().left + this->player->getBounds().width / 2, sf::VideoMode::getDesktopMode().height - this->player->getBounds().height / 2);
 	}
 }
 
@@ -405,27 +422,28 @@ void Game::updateEnemies()
 	// Spawning
 	this->spawnTimer += 0.5f;
 
-	if (this->scrap > 100 && this->currentType == 0)
+	if (this->scrap > 50 && this->currentType == 0)
+	{
+		this->spawnTimerMax -= 5;
+		this->currentType++;
+		this->player->setSprite(this->currentType);
+	}
+	else if (this->scrap > 100 && this->currentType == 1)
 	{
 		this->spawnTimerMax -= 5;
 		this->currentType++;
 	}
-	else if (this->scrap > 200 && this->currentType == 1)
+	else if (this->scrap > 150 && this->currentType == 2)
 	{
 		this->spawnTimerMax -= 5;
 		this->currentType++;
 	}
-	else if (this->scrap > 400 && this->currentType == 2)
+	else if (this->scrap > 200 && this->currentType == 3)
 	{
 		this->spawnTimerMax -= 5;
 		this->currentType++;
 	}
-	else if (this->scrap > 800 && this->currentType == 3)
-	{
-		this->spawnTimerMax -= 5;
-		this->currentType++;
-	}
-	else if (this->scrap > 1500 && this->currentType == 4)
+	else if (this->scrap > 250 && this->currentType == 4)
 	{
 		this->spawnTimerMax -= 2;
 		this->currentType++;
@@ -483,7 +501,7 @@ void Game::updateEnemies()
 			{
 				this->sound.setBuffer(bufferGameOver);
 				this->sound.play();
-				
+
 				this->player->setHealth(0);
 			}
 
@@ -493,23 +511,8 @@ void Game::updateEnemies()
 			--counter;
 		}
 
-		/*
-		if (this->scrap > 100 && this->currentType < 1)
-		{
-			this->currentType = 1;
-			enemy->setType(currentType);
-		}
-		*/
-
 		++counter;
-
-		//std::cout << "Number of enemies: " << this->enemies.size() << "\n";	// Shows number of enemy instances
 	}
-}
-
-void Game::updateEnemyType()
-{
-
 }
 
 void Game::updateCombat()
@@ -525,16 +528,16 @@ void Game::updateCombat()
 
 				if (this->enemies[i]->getHP() <= 0)
 				{
-					this->sound.setBuffer(bufferKillSound);
-					this->sound.play();
+					this->sound2.setBuffer(bufferKillSound);
+					this->sound2.play();
 					this->scrap += this->enemies[i]->getScrap();
 					delete this->enemies[i];
 					this->enemies.erase(this->enemies.begin() + i);
 				}
 				else
 				{
-					this->sound2.setBuffer(bufferHitSound);
-					this->sound2.play();
+					this->sound.setBuffer(bufferHitSound);
+					this->sound.play();
 
 					this->enemies[i]->loseHP(this->player->getAttackDamage());
 				}
@@ -545,6 +548,17 @@ void Game::updateCombat()
 				enemy_removed = true;
 			}
 		}
+	}
+}
+
+void Game::updateSounds()
+{
+	if (this->playerHPBar.getSize().x <= 0 && this->soundPlayed == false)
+	{
+		this->sound.setBuffer(bufferGameOver);
+		this->sound.play();
+
+		this->soundPlayed = true;
 	}
 }
 
@@ -560,8 +574,6 @@ void Game::update()
 
 			this->updateWorld();
 
-			this->updateEnemyType();
-
 			this->player->update();
 
 			this->updateCollision();
@@ -573,6 +585,8 @@ void Game::update()
 			this->updateCombat();
 		}
 	}
+
+	this->updateSounds();
 
 	this->updateGUI();
 }
@@ -596,6 +610,8 @@ void Game::renderGUI()
 		}
 		else
 		{
+			this->musicBackground.stop();
+
 			this->window->draw(this->lostText);
 
 			this->window->draw(this->scoreText);
@@ -609,6 +625,7 @@ void Game::renderGUI()
 void Game::renderWorld()
 {
 	this->window->draw(this->worldBackground);
+	this->window->draw(this->galaxySprite);
 }
 
 void Game::render()

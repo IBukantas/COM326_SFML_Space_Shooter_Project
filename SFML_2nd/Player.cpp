@@ -16,19 +16,34 @@ void Player::initVariables()
 	this->attackCooldown = this->attackCooldownMax;
 }
 
-void Player::initShape()
+void Player::initSprite()
 {
-	// Create the shape of the player
-	this->playerShape.setRadius(this->playerSize);
-	this->playerShape.setOrigin(this->playerSize, this->playerSize);
-	this->playerShape.setPosition(sf::VideoMode::getDesktopMode().width / 2, sf::VideoMode::getDesktopMode().height / 2 + 200);
+	// load textures of player
+	if (!playerT1.loadFromFile("images/player3.png"))
+	{
+		std::cout << "ERROR::Player::Failed to player Texture 1" << "\n";
+	}
+	if (!playerT2.loadFromFile("images/player2.png"))
+	{
+		std::cout << "ERROR::Player::Failed to player Texture 2" << "\n";
+	}
+	if (!playerT3.loadFromFile("images/player1.png"))
+	{
+		std::cout << "ERROR::Player::Failed to player Texture 3" << "\n";
+	}
+
+	this->playerSprite.setTexture(this->playerT1);
+
+	this->playerSprite.setPosition(sf::VideoMode::getDesktopMode().width /2,sf::VideoMode::getDesktopMode().height /1.5f);
+	this->playerSprite.setScale(2, 2);
+	this->playerSprite.setOrigin(this->playerSprite.getGlobalBounds().width /4, 0);
 }
 
 // Constructors / Deconstructors
 Player::Player()
 {
 	this->initVariables();
-	this->initShape();
+	this->initSprite();
 }
 
 Player::~Player()
@@ -40,12 +55,12 @@ Player::~Player()
 const sf::Vector2f& Player::getPos() const
 {
 	// TODO: insert return statement here
-	return this->playerShape.getPosition();
+	return this->playerSprite.getPosition();
 }
 
 const sf::FloatRect Player::getBounds() const
 {
-	return this->playerShape.getGlobalBounds();
+	return this->playerSprite.getGlobalBounds();
 }
 
 const int& Player::getMaxHealth() const
@@ -66,12 +81,17 @@ const int& Player::getAttackDamage() const
 // Modifiers
 void Player::setPosition(const float x, const float y)
 {
-	this->playerShape.setPosition(x, y);
+	this->playerSprite.setPosition(x, y);
 }
 
-void Player::setRadius(const float r)
+void Player::setSprite(const int currentStage)
 {
-	this->playerShape.setRadius(r);
+	if(currentStage == 2){
+		this->playerSprite.setTexture(this->playerT2);
+	}
+	if (currentStage == 4) {
+		this->playerSprite.setTexture(this->playerT3);
+	}
 }
 
 void Player::setHealth(const int health)
@@ -87,7 +107,7 @@ void Player::loseHealth(const int value)
 // Functions
 void Player::move(const float dirX, const float dirY)
 {
-	this->playerShape.move(this->movementSpeed * dirX, this->movementSpeed * dirY);
+	this->playerSprite.move(this->movementSpeed * dirX, this->movementSpeed * dirY);
 }
 
 const bool Player::canAttack()
@@ -118,5 +138,5 @@ void Player::update()
 
 void Player::render(sf::RenderTarget& target)
 {
-	target.draw(this->playerShape);
+	target.draw(this->playerSprite);
 }
