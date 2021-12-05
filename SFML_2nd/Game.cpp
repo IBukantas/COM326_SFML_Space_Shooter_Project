@@ -411,27 +411,28 @@ void Game::updateEnemies()
 	// Spawning
 	this->spawnTimer += 0.5f;
 
-	if (this->scrap > 100 && this->currentType == 0)
+	if (this->scrap > 50 && this->currentType == 0)
+	{
+		this->spawnTimerMax -= 5;
+		this->currentType++;
+		this->player->setSprite(this->currentType);
+	}
+	else if (this->scrap > 100 && this->currentType == 1)
 	{
 		this->spawnTimerMax -= 5;
 		this->currentType++;
 	}
-	else if (this->scrap > 200 && this->currentType == 1)
+	else if (this->scrap > 150 && this->currentType == 2)
 	{
 		this->spawnTimerMax -= 5;
 		this->currentType++;
 	}
-	else if (this->scrap > 400 && this->currentType == 2)
+	else if (this->scrap > 200 && this->currentType == 3)
 	{
 		this->spawnTimerMax -= 5;
 		this->currentType++;
 	}
-	else if (this->scrap > 800 && this->currentType == 3)
-	{
-		this->spawnTimerMax -= 5;
-		this->currentType++;
-	}
-	else if (this->scrap > 1500 && this->currentType == 4)
+	else if (this->scrap > 250 && this->currentType == 4)
 	{
 		this->spawnTimerMax -= 2;
 		this->currentType++;

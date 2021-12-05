@@ -47,7 +47,7 @@ public:
 
 	// Modifiers
 	void setPosition(const float x, const float y);
-	void setRadius(const float r);
+	void setSprite(const int currentStage);
 	void setHealth(const int health);
 	void loseHealth(const int value);
 

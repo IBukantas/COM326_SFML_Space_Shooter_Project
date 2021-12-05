@@ -19,7 +19,7 @@ void Player::initVariables()
 void Player::initSprite()
 {
 	// load textures of player
-	if (!playerT1.loadFromFile("images/player1.png"))
+	if (!playerT1.loadFromFile("images/player3.png"))
 	{
 		std::cout << "ERROR::Player::Failed to player Texture 1" << "\n";
 	}
@@ -27,7 +27,7 @@ void Player::initSprite()
 	{
 		std::cout << "ERROR::Player::Failed to player Texture 2" << "\n";
 	}
-	if (!playerT3.loadFromFile("images/player3.png"))
+	if (!playerT3.loadFromFile("images/player1.png"))
 	{
 		std::cout << "ERROR::Player::Failed to player Texture 3" << "\n";
 	}
@@ -35,6 +35,8 @@ void Player::initSprite()
 	this->playerSprite.setTexture(this->playerT1);
 
 	this->playerSprite.setPosition(sf::VideoMode::getDesktopMode().width /2,sf::VideoMode::getDesktopMode().height /1.5f);
+	this->playerSprite.setScale(2, 2);
+	this->playerSprite.setOrigin(this->playerSprite.getGlobalBounds().width /4, 0);
 }
 
 // Constructors / Deconstructors
@@ -80,6 +82,16 @@ const int& Player::getAttackDamage() const
 void Player::setPosition(const float x, const float y)
 {
 	this->playerSprite.setPosition(x, y);
+}
+
+void Player::setSprite(const int currentStage)
+{
+	if(currentStage == 2){
+		this->playerSprite.setTexture(this->playerT2);
+	}
+	if (currentStage == 4) {
+		this->playerSprite.setTexture(this->playerT3);
+	}
 }
 
 void Player::setHealth(const int health)
