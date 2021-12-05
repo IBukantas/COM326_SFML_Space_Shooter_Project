@@ -379,20 +379,20 @@ void Game::updateCollision()
 	// left and right world collision
 	if (this->player->getBounds().left < -this->player->getBounds().width / 2)
 	{
-		this->player->setPosition(-this->player->getBounds().width / 2 + (this->player->getBounds().width / 2), this->player->getBounds().top + (this->player->getBounds().height / 2));
+		this->player->setPosition(-this->player->getBounds().width / 2 + (this->player->getBounds().width / 2), this->player->getBounds().top);
 	}
 	else if (this->player->getBounds().left + this->player->getBounds().width > sf::VideoMode::getDesktopMode().width + this->player->getBounds().width / 2)
 	{
-		this->player->setPosition(sf::VideoMode::getDesktopMode().width, this->player->getBounds().top + (this->player->getBounds().height / 2));
+		this->player->setPosition(sf::VideoMode::getDesktopMode().width, this->player->getBounds().top);
 	}
 	// top and bottom world collision
 	if (this->player->getBounds().top < 0.f)
 	{
-		this->player->setPosition(this->player->getBounds().left + this->player->getBounds().width / 2, this->player->getBounds().height / 2);
+		this->player->setPosition(this->player->getBounds().left + this->player->getBounds().width / 2, 0);
 	}
 	else if (this->player->getBounds().top + this->player->getBounds().height / 2 > sf::VideoMode::getDesktopMode().height)
 	{
-		this->player->setPosition(this->player->getBounds().left + this->player->getBounds().width / 2, sf::VideoMode::getDesktopMode().height);
+		this->player->setPosition(this->player->getBounds().left + this->player->getBounds().width / 2, sf::VideoMode::getDesktopMode().height - this->player->getBounds().height / 2);
 	}
 }
 
