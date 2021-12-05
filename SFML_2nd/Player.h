@@ -11,7 +11,10 @@ class Player
 {
 private:
 	// Sprite
-	sf::CircleShape playerShape;
+	sf::Texture playerT1;
+	sf::Texture playerT2;
+	sf::Texture playerT3;
+	sf::Sprite playerSprite;
 
 	// Variables
 	float movementSpeed;
@@ -27,7 +30,7 @@ private:
 	float attackCooldownMax;
 
 	// Private functions
-	void initShape();
+	void initSprite();
 	void initVariables();
 
 public:
