@@ -81,12 +81,22 @@ void Game::initGUI()
 
 void Game::initWorld()
 {
-	/*if (!this->worldBackgroundTex.loadFromFile("images/background1.jpg"))
+	// loading world background file
+	if (!this->starsBackground.loadFromFile("images/stars_texture.png"))
 	{
-		std::cout << "ERROR::GAME::Could not load background texture" << "\n";
+		std::cout << "ERROR::GAME::Could not load stars background texture" << "\n";
+	}
+	if (!this->galaxyBackground.loadFromFile("images/galaxy.png"))
+	{
+		std::cout << "ERROR::GAME::Could not load Galaxy background texture" << "\n";
 	}
 
-	this->worldBackground.setTexture(this->worldBackgroundTex); */
+	this->worldBackground.setTexture(this->starsBackground);
+	this->galaxySprite.setTexture(this->galaxyBackground);
+
+	this->galaxySprite.setOrigin(this->galaxySprite.getGlobalBounds().width /2, this->galaxySprite.getGlobalBounds().height /2);
+	this->galaxySprite.setPosition(sf::VideoMode::getDesktopMode().width / 2, sf::VideoMode::getDesktopMode().height / 2);
+	
 }
 
 void Game::initSystems()
@@ -360,7 +370,8 @@ void Game::updateGUI()
 
 void Game::updateWorld()
 {
-
+	this->currentRotation = this->galaxySprite.getRotation();
+	this->galaxySprite.setRotation(this->currentRotation += 0.01f);
 }
 
 void Game::updateCollision()
@@ -614,6 +625,7 @@ void Game::renderGUI()
 void Game::renderWorld()
 {
 	this->window->draw(this->worldBackground);
+	this->window->draw(this->galaxySprite);
 }
 
 void Game::render()

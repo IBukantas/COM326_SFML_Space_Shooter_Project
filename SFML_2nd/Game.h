@@ -33,8 +33,11 @@ private:
 	sf::Text quitText;
 
 	// World
-	sf::Texture worldBackgroundTex;
+	sf::Texture starsBackground;
 	sf::Sprite worldBackground;
+	sf::Texture galaxyBackground;
+	sf::Sprite galaxySprite;
+	float currentRotation;
 
 	// Systems
 	bool paused;
