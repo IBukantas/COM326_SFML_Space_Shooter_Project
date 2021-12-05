@@ -10,11 +10,18 @@
 class Enemy
 {
 private:
-	// Shape
-	sf::CircleShape shape;
+	
+	// Sprite
+	sf::Texture enemyLT1;
+	sf::Texture enemyLT2;
+	sf::Texture enemyMT1;
+	sf::Texture enemyMT2;
+	sf::Texture enemyST1;
+	sf::Texture enemyST2;
+	sf::Sprite enemySprite;
 
 	// Variables
-	unsigned pointCount;
+	
 	int type;
 	int hp;
 	int hpMax;
@@ -26,7 +33,7 @@ private:
 
 	
 	// Private functions
-	void initShape();
+	void initSprite();
 	void initVariables();
 
 public:
