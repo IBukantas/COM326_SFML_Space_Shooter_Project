@@ -33,8 +33,11 @@ private:
 	sf::Text quitText;
 
 	// World
-	sf::Texture worldBackgroundTex;
+	sf::Texture starsBackground;
 	sf::Sprite worldBackground;
+	sf::Texture galaxyBackground;
+	sf::Sprite galaxySprite;
+	float currentRotation;
 
 	// Systems
 	bool paused;
@@ -55,6 +58,7 @@ private:
 
 	// Music
 	sf::Music musicBackground;
+	sf::Music musicMenu;
 	float gameVolume;
 
 	// Sounds
@@ -62,8 +66,20 @@ private:
 	sf::SoundBuffer bufferGunShot;
 	sf::SoundBuffer bufferHitSound;
 	sf::SoundBuffer bufferKillSound;
+	sf::SoundBuffer bufferHealingSound;
+	sf::SoundBuffer bufferScrappingSound;
+	sf::SoundBuffer bufferMenuIn;
+	sf::SoundBuffer bufferMenuOut;
+	sf::SoundBuffer bufferAdjustSound;
+	sf::SoundBuffer bufferPlayerHit;
 	sf::Sound sound;
-	sf::Sound sound2;
+	sf::Sound soundHitSound;
+	sf::Sound soundMenu;
+	sf::Sound soundAdjustSound;
+	sf::Sound soundPlayerHit;
+	sf::Sound soundKillSound;
+	sf::Sound soundHealthBarSound;
+	sf::Sound soundGameOver;
 	sf::Sound soundShot;
 	float effectVolume;
 	bool soundPlayed;
