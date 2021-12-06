@@ -39,7 +39,24 @@ void Enemy::initSprite()
 		}
 	}
 	else if (this->scrap <= 31) {
-		this->enemySprite.setTexture(this->enemyMT1);
+		if (rand() % 4 + 1 == 1) {
+			this->enemySprite.setTexture(this->enemyMT1);
+			this->enemySprite.setScale(2.f, 2.f);
+		}
+		else {
+			this->enemySprite.setTexture(this->enemyMT2);
+			this->enemySprite.setScale(2.f, 2.f);
+		}
+	}
+	else if (this->scrap <= 52) {
+		if (rand() % 2 + 1 == 1) {
+			this->enemySprite.setTexture(this->enemyLT1);
+			this->enemySprite.setScale(2.f, 2.f);
+		}
+		else {
+			this->enemySprite.setTexture(this->enemyLT2);
+			this->enemySprite.setScale(2.f, 2.f);
+		}
 	}
 
 	this->enemySprite.setRotation(180.f);
@@ -51,15 +68,43 @@ void Enemy::initVariables()
 	if (this->type == 0) {
 		this->hpMax = (rand() % 5 + 2);
 		this->hp=this->hpMax;
-		this->speed = (rand() % 5 + 2);
+		this->speed = (rand() % 4 + 2);
 		this->damage = 2;
 		this->scrap = this->hpMax + this->speed + this->damage;
 	}
-	else if (this->type = 1) {
-		this->hpMax = (rand() % 10 + 5);
+	else if (this->type == 1) {
+		this->hpMax = (rand() % 10 + 2);
 		this->hp = this->hpMax;
-		this->speed = (rand() % 10 + 5);
+		this->speed = (rand() % 5 + 3);
 		this->damage = 3;
+		this->scrap = this->hpMax + this->speed + this->damage;
+	}
+	else if (this->type == 2) {
+		this->hpMax = (rand() % 15 + 2);
+		this->hp = this->hpMax;
+		this->speed = (rand() % 6 + 4);
+		this->damage = 5;
+		this->scrap = this->hpMax + this->speed + this->damage;
+	}
+	else if (this->type == 3) {
+		this->hpMax = (rand() % 20 + 2);
+		this->hp = this->hpMax;
+		this->speed = (rand() % 7 + 5);
+		this->damage = 5;
+		this->scrap = this->hpMax + this->speed + this->damage;
+	}
+	else if (this->type == 4) {
+		this->hpMax = (rand() % 25 + 2);
+		this->hp = this->hpMax;
+		this->speed = (rand() % 8 + 6);
+		this->damage = 5;
+		this->scrap = this->hpMax + this->speed + this->damage;
+	}
+	else if (this->type == 5) {
+		this->hpMax = (rand() % 30 + 2);
+		this->hp = this->hpMax;
+		this->speed = (rand() % 9 + 7);
+		this->damage = 5;
 		this->scrap = this->hpMax + this->speed + this->damage;
 	}
 }
