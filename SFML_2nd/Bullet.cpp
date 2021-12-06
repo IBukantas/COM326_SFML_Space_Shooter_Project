@@ -21,6 +21,7 @@ Bullet::~Bullet()
 // Accessor
 sf::FloatRect Bullet::getBounds() const
 {
+	// Return global bounds
 	return this->shape.getGlobalBounds();
 }
 
@@ -33,6 +34,7 @@ void Bullet::update()
 
 void Bullet::render(sf::RenderTarget* target)
 {
+	// draw bullet on target
 	target->draw(this->shape);
 }
 

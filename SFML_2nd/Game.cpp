@@ -3,6 +3,7 @@
 // Private functions
 void Game::initWindow()
 {
+	// Create window
 	this->window = new sf::RenderWindow(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Game", sf::Style::Fullscreen);
 	this->window->setFramerateLimit(60);
 	this->window->setVerticalSyncEnabled(false);
@@ -10,6 +11,7 @@ void Game::initWindow()
 
 void Game::initTextures()
 {
+	//Load bullet textures
 	this->textures["BULLET"] = new sf::Texture();
 	this->textures["BULLET"]->loadFromFile("images/projectile_image.png");
 }
@@ -44,7 +46,7 @@ void Game::initGUI()
 	this->scoreText.setCharacterSize(80);
 	this->scoreText.setFillColor(sf::Color::Transparent);
 
-	// Initialise Player GUI
+	// Initialise Player Health GUI
 	this->playerHPBar.setSize(sf::Vector2f(400.f, 20.f));
 	this->playerHPBar.setPosition(sf::Vector2f(20.f, 20.f));
 	this->playerHPBar.setOutlineColor(sf::Color(200, 200, 200, 200));
@@ -81,7 +83,7 @@ void Game::initGUI()
 
 void Game::initWorld()
 {
-	// loading world background file
+	// Load world background file
 	if (!this->starsBackground.loadFromFile("images/stars_texture.png"))
 	{
 		std::cout << "ERROR::GAME::Could not load stars background texture" << "\n";
@@ -91,9 +93,11 @@ void Game::initWorld()
 		std::cout << "ERROR::GAME::Could not load Galaxy background texture" << "\n";
 	}
 
+	// Initialise background textures
 	this->worldBackground.setTexture(this->starsBackground);
 	this->galaxySprite.setTexture(this->galaxyBackground);
 
+	// Initialise background properties
 	this->galaxySprite.setOrigin(this->galaxySprite.getGlobalBounds().width /2, this->galaxySprite.getGlobalBounds().height /2);
 	this->galaxySprite.setPosition(sf::VideoMode::getDesktopMode().width / 2, sf::VideoMode::getDesktopMode().height / 2);
 	
@@ -116,11 +120,13 @@ void Game::initSystems()
 
 void Game::initPlayer()
 {
+	// Create player
 	this->player = new Player();
 }
 
 void Game::initEnemies()
 {
+	// Initialise enemy variables
 	this->currentType = 0;
 	this->spawnTimerMax = 25.f;
 	this->spawnTimer = this->spawnTimerMax;
@@ -128,6 +134,7 @@ void Game::initEnemies()
 
 void Game::initMusic()
 {
+	// Load music from files
 	if (!musicBackground.openFromFile(".\\audio\\background_song.ogg"))
 	{
 		std::cout << "ERROR::GAME::Failed to load background music" << "\n";
@@ -138,6 +145,7 @@ void Game::initMusic()
 		std::cout << "ERROR::GAME::Failed to load menu music" << "\n";
 	}
 
+	// Initialise music properties
 	this->musicMenu.play();
 	this->gameVolume = 10.f;
 	this->musicBackground.setVolume(this->gameVolume);
@@ -148,6 +156,7 @@ void Game::initMusic()
 
 void Game::initSounds()
 {
+	// Load sound effects from file
 	if (!bufferGameOver.loadFromFile(".\\audio\\game_over.ogg"))
 	{
 		std::cout << "ERROR::GAME::Failed to load game over sound" << "\n";
@@ -198,6 +207,7 @@ void Game::initSounds()
 		std::cout << "ERROR::GAME::Failed to load adjust sound" << "\n";
 	}
 
+	// Initialise sound effect properties
 	this->effectVolume = 10.f;
 	this->sound.setVolume(this->effectVolume);
 	this->soundHitSound.setVolume(this->effectVolume);
@@ -259,13 +269,6 @@ void Game::run()
 		this->update();
 		this->render();
 	}
-}
-
-void Game::updateMousePositions()
-{
-	// Updates mouse positions
-
-	this->mousePosWindow = sf::Mouse::getPosition(*this->window);
 }
 
 void Game::updatePollEvents()
@@ -382,7 +385,7 @@ void Game::updateInput()
 	// When "Space Bar" is pressed convert scrap to health
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->scrap > 1)
 	{
-		if (this->player->getPlayerHealth() < this->player->getMaxHealth() - 1)
+		if (this->player->getPlayerHealth() < this->player->getMaxHealth())
 		{
 			this->player->loseHealth(-1);
 		}
@@ -417,6 +420,7 @@ void Game::updateInput()
 
 void Game::updateGUI()
 {
+	// Create new sting streams
 	std::stringstream ss;
 	std::stringstream ssp2;
 
@@ -428,6 +432,7 @@ void Game::updateGUI()
 
 	this->scoreText.setString(ssp2.str());
 
+	// Set position of text
 	this->scoreText.setPosition(
 		sf::Vector2f(
 			this->lostText.getGlobalBounds().left + 40.f,
@@ -450,13 +455,14 @@ void Game::updateGUI()
 
 void Game::updateWorld()
 {
+	// Animate galaxy background
 	this->currentRotation = this->galaxySprite.getRotation();
 	this->galaxySprite.setRotation(this->currentRotation += 0.01f);
 }
 
 void Game::updateCollision()
 {
-	// left and right world collision
+	// left and right player world collision
 	if (this->player->getBounds().left < -this->player->getBounds().width / 2)
 	{
 		this->player->setPosition(-this->player->getBounds().width / 2 + (this->player->getBounds().width / 2), this->player->getBounds().top);
@@ -465,7 +471,7 @@ void Game::updateCollision()
 	{
 		this->player->setPosition(sf::VideoMode::getDesktopMode().width, this->player->getBounds().top);
 	}
-	// top and bottom world collision
+	// top and bottom player world collision
 	if (this->player->getBounds().top < 0.f)
 	{
 		this->player->setPosition(this->player->getBounds().left + this->player->getBounds().width / 2, 0);
@@ -492,8 +498,6 @@ void Game::updateBullets()
 			--counter;
 		}
 		++counter;
-
-		//std::cout << "Number of bullets: " << this->bullets.size() << "\n";	// Shows number of bullet instances
 	}
 }
 
@@ -597,6 +601,7 @@ void Game::updateEnemies()
 
 void Game::updateCombat()
 {
+	// Update enemy and bullet collision
 	for (int i = 0; i < this->enemies.size(); i++)
 	{
 		bool enemy_removed = false;
@@ -633,6 +638,7 @@ void Game::updateCombat()
 
 void Game::updateSounds()
 {
+	// Update game over sound
 	if (this->playerHPBar.getSize().x <= 0 && this->soundPlayed == false)
 	{
 		this->soundGameOver.setBuffer(bufferGameOver);
@@ -644,8 +650,10 @@ void Game::updateSounds()
 
 void Game::update()
 {
+	// Update poll events
 	this->updatePollEvents();
 
+	// Update gameplay objects when game is not paused and player is not dead
 	if (this->paused == false)
 	{
 		if (this->playerHPBar.getSize().x > 0)
@@ -666,6 +674,7 @@ void Game::update()
 		}
 	}
 
+	// Update update the rest of the objects
 	this->updateSounds();
 
 	this->updateGUI();
@@ -673,14 +682,17 @@ void Game::update()
 
 void Game::renderGUI()
 {
+	// When paused render the control text
 	if (this->paused == true)
 	{
 		this->window->draw(this->controlsText);
 	}
 	else
 	{
+		// When not paused check if player is dead
 		if (this->playerHPBar.getSize().x > 0)
 		{
+			// When player is alive render gameplay objects 
 			this->window->draw(this->scrapText);
 
 			this->window->draw(this->playerHPBarBack);
@@ -690,6 +702,7 @@ void Game::renderGUI()
 		}
 		else
 		{
+			// When player is dead render gameover objects 
 			this->musicBackground.stop();
 
 			this->window->draw(this->lostText);
@@ -704,6 +717,7 @@ void Game::renderGUI()
 
 void Game::renderWorld()
 {
+	// Render background objects
 	this->window->draw(this->worldBackground);
 	this->window->draw(this->galaxySprite);
 }

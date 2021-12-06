@@ -3,7 +3,7 @@
 // Private functions
 void Player::initVariables()
 {
-	this->movementSpeed = 12.f;	// Not used for anything rn
+	this->movementSpeed = 12.f;
 
 	this->maxHealth = 20;
 	this->playerHealth = this->maxHealth;
@@ -54,38 +54,44 @@ Player::~Player()
 // Accessors
 const sf::Vector2f& Player::getPos() const
 {
-	// TODO: insert return statement here
+	// Return player's position
 	return this->playerSprite.getPosition();
 }
 
 const sf::FloatRect Player::getBounds() const
 {
+	// Return player's global bounds
 	return this->playerSprite.getGlobalBounds();
 }
 
 const int& Player::getMaxHealth() const
 {
+	// Return player's max health
 	return this->maxHealth;
 }
 
 const int& Player::getPlayerHealth() const
 {
+	// Return player's current health
 	return this->playerHealth;
 }
 
 const int& Player::getAttackDamage() const
 {
+	// Return player's attack damage
 	return this->attackDamage;
 }
 
 // Modifiers
 void Player::setPosition(const float x, const float y)
 {
+	// Set player's position
 	this->playerSprite.setPosition(x, y);
 }
 
 void Player::setSprite(const int currentStage)
 {
+	// Set player's player's sprite
 	if(currentStage == 2){
 		this->playerSprite.setTexture(this->playerT2);
 	}
