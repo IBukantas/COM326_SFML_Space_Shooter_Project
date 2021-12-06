@@ -133,10 +133,17 @@ void Game::initMusic()
 		std::cout << "ERROR::GAME::Failed to load background music" << "\n";
 	}
 
-	this->musicBackground.play();
+	if (!musicMenu.openFromFile(".\\audio\\menu_music.ogg"))
+	{
+		std::cout << "ERROR::GAME::Failed to load menu music" << "\n";
+	}
+
+	this->musicMenu.play();
 	this->gameVolume = 10.f;
 	this->musicBackground.setVolume(this->gameVolume);
 	this->musicBackground.setLoop(true);
+	this->musicMenu.setVolume(this->gameVolume);
+	this->musicMenu.setLoop(true);
 }
 
 void Game::initSounds()
@@ -161,9 +168,45 @@ void Game::initSounds()
 		std::cout << "ERROR::GAME::Failed to load kill sound" << "\n";
 	}
 
+	if (!bufferHealingSound.loadFromFile(".\\audio\\healing_sound.ogg"))
+	{
+		std::cout << "ERROR::GAME::Failed to load healing sound" << "\n";
+	}
+
+	if (!bufferScrappingSound.loadFromFile(".\\audio\\scrapping_sound.ogg"))
+	{
+		std::cout << "ERROR::GAME::Failed to load scrapping sound" << "\n";
+	}
+
+	if (!bufferMenuIn.loadFromFile(".\\audio\\menu_in.ogg"))
+	{
+		std::cout << "ERROR::GAME::Failed to load menu in sound" << "\n";
+	}
+
+	if (!bufferMenuOut.loadFromFile(".\\audio\\menu_out.ogg"))
+	{
+		std::cout << "ERROR::GAME::Failed to load menu out sound" << "\n";
+	}
+
+	if (!bufferPlayerHit.loadFromFile(".\\audio\\player_hit.ogg"))
+	{
+		std::cout << "ERROR::GAME::Failed to load player hit sound" << "\n";
+	}
+
+	if (!bufferAdjustSound.loadFromFile(".\\audio\\adjust_sound.ogg"))
+	{
+		std::cout << "ERROR::GAME::Failed to load adjust sound" << "\n";
+	}
+
 	this->effectVolume = 10.f;
 	this->sound.setVolume(this->effectVolume);
-	this->sound2.setVolume(this->effectVolume);
+	this->soundHitSound.setVolume(this->effectVolume);
+	this->soundMenu.setVolume(this->effectVolume);
+	this->soundAdjustSound.setVolume(this->effectVolume);
+	this->soundPlayerHit.setVolume(this->effectVolume);
+	this->soundKillSound.setVolume(this->effectVolume);
+	this->soundHealthBarSound.setVolume(this->effectVolume);
+	this->soundGameOver.setVolume(this->effectVolume);
 	this->soundShot.setVolume(this->effectVolume);
 }
 
@@ -242,10 +285,18 @@ void Game::updatePollEvents()
 		{
 			if (this->paused == true)
 			{
+				this->musicMenu.stop();
+				this->musicBackground.play();
+				this->soundMenu.setBuffer(this->bufferMenuOut);
+				this->soundMenu.play();
 				this->paused = false;
 			}
 			else
 			{
+				this->musicBackground.stop();
+				this->musicMenu.play();
+				this->soundMenu.setBuffer(this->bufferMenuIn);
+				this->soundMenu.play();
 				this->paused = true;
 			}
 		}
@@ -255,12 +306,14 @@ void Game::updatePollEvents()
 		{
 			this->gameVolume += 10.f;
 			this->musicBackground.setVolume(this->gameVolume);
+			this->musicMenu.setVolume(this->gameVolume);
 		}
 
 		if (e.type == sf::Event::KeyPressed && e.Event::key.code == sf::Keyboard::Subtract && this->gameVolume > 0.f)
 		{
 			this->gameVolume -= 10.f;
 			this->musicBackground.setVolume(this->gameVolume);
+			this->musicMenu.setVolume(this->gameVolume);
 		}
 
 		// Adjust sound effect volume
@@ -268,16 +321,34 @@ void Game::updatePollEvents()
 		{
 			this->effectVolume += 10.f;
 			this->sound.setVolume(this->effectVolume);
-			this->sound2.setVolume(this->effectVolume);
+			this->soundHitSound.setVolume(this->effectVolume);
+			this->soundMenu.setVolume(this->effectVolume);
+			this->soundAdjustSound.setVolume(this->effectVolume);
+			this->soundPlayerHit.setVolume(this->effectVolume);
+			this->soundKillSound.setVolume(this->effectVolume);
+			this->soundHealthBarSound.setVolume(this->effectVolume);
+			this->soundGameOver.setVolume(this->effectVolume);
 			this->soundShot.setVolume(this->effectVolume);
+
+			this->soundAdjustSound.setBuffer(this->bufferAdjustSound);
+			this->soundAdjustSound.play();
 		}
 
 		if (e.type == sf::Event::KeyPressed && e.Event::key.code == sf::Keyboard::Divide && this->effectVolume > 0.f)
 		{
 			this->effectVolume -= 10.f;
 			this->sound.setVolume(this->effectVolume);
-			this->sound2.setVolume(this->effectVolume);
+			this->soundHitSound.setVolume(this->effectVolume);
+			this->soundMenu.setVolume(this->effectVolume);
+			this->soundAdjustSound.setVolume(this->effectVolume);
+			this->soundPlayerHit.setVolume(this->effectVolume);
+			this->soundKillSound.setVolume(this->effectVolume);
+			this->soundHealthBarSound.setVolume(this->effectVolume);
+			this->soundGameOver.setVolume(this->effectVolume);
 			this->soundShot.setVolume(this->effectVolume);
+
+			this->soundAdjustSound.setBuffer(this->bufferAdjustSound);
+			this->soundAdjustSound.play();
 		}
 	}
 }
@@ -305,13 +376,23 @@ void Game::updateInput()
 	// When "Space Bar" is pressed convert scrap to health
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->player->getPlayerHealth() < this->player->getMaxHealth() - 1 && this->scrap > 1)
 	{
+		this->soundHealthBarSound.setBuffer(this->bufferHealingSound);
+		this->soundHealthBarSound.play();
+
 		this->player->loseHealth(-1);
 
 		this->scrap -= 2;
 	}
+	// When right mouse button is pressed convert health to scrap
+	else if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && this->player->getPlayerHealth() > 0)
+	{
+		this->soundHealthBarSound.setBuffer(this->bufferScrappingSound);
+		this->soundHealthBarSound.play();
 
-	// Update mouse position
-	this->updateMousePositions();
+		this->scrap += 2;
+
+		this->player->loseHealth(1);
+	}
 
 	// When left mouse button is pressed create new bullet
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->player->canAttack() && scrap > 0)
@@ -323,16 +404,6 @@ void Game::updateInput()
 
 		this->scrap--;
 	}
-
-	// When right mouse button is pressed convert health to scrap
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && this->player->getPlayerHealth() > 0)
-	{
-		this->scrap += 2;
-
-		this->player->loseHealth(1);
-	}
-
-	
 }
 
 void Game::updateGUI()
@@ -492,15 +563,15 @@ void Game::updateEnemies()
 			// Take away player health equal to enemy damage
 			if (this->player->getPlayerHealth() >= enemy->getDamage())
 			{
-				this->sound2.setBuffer(bufferHitSound);
-				this->sound2.play();
+				this->soundPlayerHit.setBuffer(bufferPlayerHit);
+				this->soundPlayerHit.play();
 
 				this->player->loseHealth(enemy->getDamage());
 			}
 			else
 			{
-				this->sound.setBuffer(bufferGameOver);
-				this->sound.play();
+				this->soundGameOver.setBuffer(bufferGameOver);
+				this->soundGameOver.play();
 
 				this->player->setHealth(0);
 			}
@@ -528,16 +599,16 @@ void Game::updateCombat()
 
 				if (this->enemies[i]->getHP() <= 0)
 				{
-					this->sound2.setBuffer(bufferKillSound);
-					this->sound2.play();
+					this->soundKillSound.setBuffer(bufferKillSound);
+					this->soundKillSound.play();
 					this->scrap += this->enemies[i]->getScrap();
 					delete this->enemies[i];
 					this->enemies.erase(this->enemies.begin() + i);
 				}
 				else
 				{
-					this->sound.setBuffer(bufferHitSound);
-					this->sound.play();
+					this->soundHitSound.setBuffer(bufferHitSound);
+					this->soundHitSound.play();
 
 					this->enemies[i]->loseHP(this->player->getAttackDamage());
 				}
@@ -555,8 +626,8 @@ void Game::updateSounds()
 {
 	if (this->playerHPBar.getSize().x <= 0 && this->soundPlayed == false)
 	{
-		this->sound.setBuffer(bufferGameOver);
-		this->sound.play();
+		this->soundGameOver.setBuffer(bufferGameOver);
+		this->soundGameOver.play();
 
 		this->soundPlayed = true;
 	}
