@@ -31,6 +31,7 @@ private:
 	sf::Text showText;
 	sf::Text controlsText;
 	sf::Text quitText;
+	sf::Text stageText;
 
 	// World
 	sf::Texture starsBackground;

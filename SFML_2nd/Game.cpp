@@ -380,12 +380,15 @@ void Game::updateInput()
 	}
 
 	// When "Space Bar" is pressed convert scrap to health
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->player->getPlayerHealth() < this->player->getMaxHealth() - 1 && this->scrap > 1)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->scrap > 1)
 	{
+		if (this->player->getPlayerHealth() < this->player->getMaxHealth() - 1)
+		{
+			this->player->loseHealth(-1);
+		}
+
 		this->soundHealthBarSound.setBuffer(this->bufferHealingSound);
 		this->soundHealthBarSound.play();
-
-		this->player->loseHealth(-1);
 
 		this->scrap -= 2;
 	}
@@ -505,22 +508,22 @@ void Game::updateEnemies()
 		this->currentType++;
 		this->player->setSprite(this->currentType);
 	}
-	else if (this->scrap > 300 && this->currentType == 1)
+	else if (this->scrap > 500 && this->currentType == 1)
 	{
 		this->spawnTimerMax -= 3;
 		this->currentType++;
 	}
-	else if (this->scrap > 700 && this->currentType == 2)
+	else if (this->scrap > 1000 && this->currentType == 2)
 	{
 		this->spawnTimerMax -= 3;
 		this->currentType++;
 	}
-	else if (this->scrap > 1000 && this->currentType == 3)
+	else if (this->scrap > 1700 && this->currentType == 3)
 	{
 		this->spawnTimerMax -= 3;
 		this->currentType++;
 	}
-	else if (this->scrap > 1500 && this->currentType == 4)
+	else if (this->scrap > 3000 && this->currentType == 4)
 	{
 		this->spawnTimerMax -= 2;
 		this->currentType++;
