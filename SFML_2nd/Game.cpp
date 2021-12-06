@@ -307,6 +307,9 @@ void Game::updatePollEvents()
 			this->gameVolume += 10.f;
 			this->musicBackground.setVolume(this->gameVolume);
 			this->musicMenu.setVolume(this->gameVolume);
+
+			this->soundAdjustSound.setBuffer(this->bufferAdjustSound);
+			this->soundAdjustSound.play();
 		}
 
 		if (e.type == sf::Event::KeyPressed && e.Event::key.code == sf::Keyboard::Subtract && this->gameVolume > 0.f)
@@ -314,6 +317,9 @@ void Game::updatePollEvents()
 			this->gameVolume -= 10.f;
 			this->musicBackground.setVolume(this->gameVolume);
 			this->musicMenu.setVolume(this->gameVolume);
+
+			this->soundAdjustSound.setBuffer(this->bufferAdjustSound);
+			this->soundAdjustSound.play();
 		}
 
 		// Adjust sound effect volume
