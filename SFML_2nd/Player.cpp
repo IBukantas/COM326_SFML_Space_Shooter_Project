@@ -41,7 +41,6 @@ Player::Player() {
 }
 
 Player::~Player() {
-
 }
 
 // Accessors
