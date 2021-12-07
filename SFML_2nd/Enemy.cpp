@@ -3,22 +3,22 @@
 void Enemy::initSprite() {
 	// Load textures of player
 	if (!enemyLT1.loadFromFile("images/largeEnemy1.png")) {
-		std::cout << "ERROR::Player::Failed to player Texture 1" << "\n";
+		std::cout << "ERROR::Player::Failed to load large enemy Texture 1" << "\n";
 	}
 	if (!enemyLT2.loadFromFile("images/largeEnemy2.png")) {
-		std::cout << "ERROR::Player::Failed to player Texture 2" << "\n";
+		std::cout << "ERROR::Player::Failed to load large enemy Texture 2" << "\n";
 	}
 	if (!enemyMT1.loadFromFile("images/medEnemy1.png")) {
-		std::cout << "ERROR::Player::Failed to player Texture 3" << "\n";
+		std::cout << "ERROR::Player::Failed to load medium enemy Texture 1" << "\n";
 	}
 	if (!enemyMT2.loadFromFile("images/medEnemy2.png")) {
-		std::cout << "ERROR::Player::Failed to player Texture 3" << "\n";
+		std::cout << "ERROR::Player::Failed to load medium enemy Texture 2" << "\n";
 	}
 	if (!enemyST1.loadFromFile("images/smallEnemy1.png")) {
-		std::cout << "ERROR::Player::Failed to player Texture 3" << "\n";
+		std::cout << "ERROR::Player::Failed to load small enemy Texture 1" << "\n";
 	}
 	if (!enemyST2.loadFromFile("images/smallEnemy2.png")) {
-		std::cout << "ERROR::Player::Failed to player Texture 3" << "\n";
+		std::cout << "ERROR::Player::Failed to load small enemy Texture 2" << "\n";
 	}
 
 	// Initialise Enemy sprite based on scrap amount
@@ -92,14 +92,14 @@ void Enemy::initVariables() {
 		this->hpMax = (rand() % 25 + 2);
 		this->hp = this->hpMax;
 		this->speed = (rand() % 8 + 6);
-		this->damage = 5;
+		this->damage = (rand() % 3 + 5);
 		this->scrap = this->hpMax + this->speed + this->damage;
 	}
 	else if (this->type == 5) {
 		this->hpMax = (rand() % 30 + 2);
 		this->hp = this->hpMax;
 		this->speed = (rand() % 9 + 7);
-		this->damage = 5;
+		this->damage = (rand() % 6 + 5);;
 		this->scrap = this->hpMax + this->speed + this->damage;
 	}
 }

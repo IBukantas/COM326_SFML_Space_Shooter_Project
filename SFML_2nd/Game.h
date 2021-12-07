@@ -107,8 +107,6 @@ public:
 	// Functions
 	void run();
 
-	void updateMousePositions();
-
 	void updatePollEvents();
 	void updateInput();
 	void updateGUI();
