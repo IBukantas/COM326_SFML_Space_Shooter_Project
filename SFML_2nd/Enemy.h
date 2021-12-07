@@ -7,8 +7,7 @@
 #include<SFML/System.hpp>
 #include<SFML/Audio.hpp>
 
-class Enemy
-{
+class Enemy {
 private:
 	
 	// Sprite

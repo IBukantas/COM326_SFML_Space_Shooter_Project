@@ -5,8 +5,7 @@
 
 #include<SFML/Graphics.hpp>
 
-class Bullet
-{
+class Bullet {
 private:
 	// Sprite
 	sf::Sprite shape;

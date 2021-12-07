@@ -7,8 +7,7 @@
 #include<SFML/System.hpp>
 #include<SFML/Audio.hpp>
 
-class Player
-{
+class Player {
 private:
 	// Sprite
 	sf::Texture playerT1;

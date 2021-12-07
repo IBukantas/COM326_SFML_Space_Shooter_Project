@@ -1,33 +1,26 @@
 #include "Enemy.h"
 
-void Enemy::initSprite()
-{
+void Enemy::initSprite() {
 	// Load textures of player
-	if (!enemyLT1.loadFromFile("images/largeEnemy1.png"))
-	{
+	if (!enemyLT1.loadFromFile("images/largeEnemy1.png")) {
 		std::cout << "ERROR::Player::Failed to player Texture 1" << "\n";
 	}
-	if (!enemyLT2.loadFromFile("images/largeEnemy2.png"))
-	{
+	if (!enemyLT2.loadFromFile("images/largeEnemy2.png")) {
 		std::cout << "ERROR::Player::Failed to player Texture 2" << "\n";
 	}
-	if (!enemyMT1.loadFromFile("images/medEnemy1.png"))
-	{
+	if (!enemyMT1.loadFromFile("images/medEnemy1.png")) {
 		std::cout << "ERROR::Player::Failed to player Texture 3" << "\n";
 	}
-	if (!enemyMT2.loadFromFile("images/medEnemy2.png"))
-	{
+	if (!enemyMT2.loadFromFile("images/medEnemy2.png")) {
 		std::cout << "ERROR::Player::Failed to player Texture 3" << "\n";
 	}
-	if (!enemyST1.loadFromFile("images/smallEnemy1.png"))
-	{
+	if (!enemyST1.loadFromFile("images/smallEnemy1.png")) {
 		std::cout << "ERROR::Player::Failed to player Texture 3" << "\n";
 	}
-	if (!enemyST2.loadFromFile("images/smallEnemy2.png"))
-	{
+	if (!enemyST2.loadFromFile("images/smallEnemy2.png")) {
 		std::cout << "ERROR::Player::Failed to player Texture 3" << "\n";
 	}
-	
+
 	// Initialise Enemy sprite based on scrap amount
 	if (this->scrap <= 14) {
 		if (rand() % 2 + 1 == 1) {
@@ -62,15 +55,14 @@ void Enemy::initSprite()
 
 	// Initialise rotation
 	this->enemySprite.setRotation(180.f);
-	
+
 }
 
-void Enemy::initVariables()
-{
+void Enemy::initVariables() {
 	// Initialise variables based on type
 	if (this->type == 0) {
 		this->hpMax = (rand() % 5 + 2);
-		this->hp=this->hpMax;
+		this->hp = this->hpMax;
 		this->speed = (rand() % 4 + 2);
 		this->damage = 2;
 		this->scrap = this->hpMax + this->speed + this->damage;
@@ -114,8 +106,7 @@ void Enemy::initVariables()
 
 
 // Constructors / Deconstructors
-Enemy::Enemy(float pos_x, float pos_y, int _type)
-{
+Enemy::Enemy(float pos_x, float pos_y, int _type) {
 	this->type = _type;
 
 	this->initVariables();
@@ -125,53 +116,45 @@ Enemy::Enemy(float pos_x, float pos_y, int _type)
 	this->enemySprite.setPosition(pos_x, pos_y);
 }
 
-Enemy::~Enemy()
-{
+Enemy::~Enemy() {
 
 }
 
 // Accessors
-const sf::FloatRect Enemy::getBounds() const
-{
+const sf::FloatRect Enemy::getBounds() const {
 	// Return global bounds
 	return this->enemySprite.getGlobalBounds();
 }
 
-const int& Enemy::getScrap() const
-{
+const int& Enemy::getScrap() const {
 	// Return scrap
 	return this->scrap;
 }
 
-const int& Enemy::getDamage() const
-{
+const int& Enemy::getDamage() const {
 	// Return damage
 	return this->damage;
 }
 
-const int& Enemy::getHP() const
-{
+const int& Enemy::getHP() const {
 	// Return return current hp
 	return this->hp;
 }
 
 // Modifiers
-void Enemy::loseHP(const int value)
-{
+void Enemy::loseHP(const int value) {
 	// Set health
 	this->hp -= value;
 }
 
 // Functions
-void Enemy::update()
-{
+void Enemy::update() {
 	// Movement
 	this->enemySprite.move(0.f, this->speed);
 
 }
 
-void Enemy::render(sf::RenderTarget* target)
-{
+void Enemy::render(sf::RenderTarget* target) {
 	// draw enemy to target
 	target->draw(this->enemySprite);
 }

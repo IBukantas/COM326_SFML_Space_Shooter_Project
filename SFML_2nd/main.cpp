@@ -1,8 +1,18 @@
+/*
+*   Classname or filename
+*
+*   Version information
+*   Author:
+*   Date:
+* 
+*   Copyright notice
+*/
+
 #include "Game.h"
+
 #include<time.h>
 
-int main()
-{
+int main() {
     // Initialize random variable
     srand(time(0));
 

@@ -1,8 +1,7 @@
 #include "Player.h"
 
 // Private functions
-void Player::initVariables()
-{
+void Player::initVariables() {
 	this->movementSpeed = 12.f;
 
 	this->maxHealth = 20;
@@ -16,19 +15,15 @@ void Player::initVariables()
 	this->attackCooldown = this->attackCooldownMax;
 }
 
-void Player::initSprite()
-{
+void Player::initSprite() {
 	// load textures of player
-	if (!playerT1.loadFromFile("images/player3.png"))
-	{
+	if (!playerT1.loadFromFile("images/player3.png")) {
 		std::cout << "ERROR::Player::Failed to player Texture 1" << "\n";
 	}
-	if (!playerT2.loadFromFile("images/player2.png"))
-	{
+	if (!playerT2.loadFromFile("images/player2.png")) {
 		std::cout << "ERROR::Player::Failed to player Texture 2" << "\n";
 	}
-	if (!playerT3.loadFromFile("images/player1.png"))
-	{
+	if (!playerT3.loadFromFile("images/player1.png")) {
 		std::cout << "ERROR::Player::Failed to player Texture 3" << "\n";
 	}
 
@@ -40,57 +35,48 @@ void Player::initSprite()
 }
 
 // Constructors / Deconstructors
-Player::Player()
-{
+Player::Player() {
 	this->initVariables();
 	this->initSprite();
 }
 
-Player::~Player()
-{
+Player::~Player() {
 
 }
 
 // Accessors
-const sf::Vector2f& Player::getPos() const
-{
+const sf::Vector2f& Player::getPos() const {
 	// Return player's position
 	return this->playerSprite.getPosition();
 }
 
-const sf::FloatRect Player::getBounds() const
-{
+const sf::FloatRect Player::getBounds() const {
 	// Return player's global bounds
 	return this->playerSprite.getGlobalBounds();
 }
 
-const int& Player::getMaxHealth() const
-{
+const int& Player::getMaxHealth() const {
 	// Return player's max health
 	return this->maxHealth;
 }
 
-const int& Player::getPlayerHealth() const
-{
+const int& Player::getPlayerHealth() const {
 	// Return player's current health
 	return this->playerHealth;
 }
 
-const int& Player::getAttackDamage() const
-{
+const int& Player::getAttackDamage() const {
 	// Return player's attack damage
 	return this->attackDamage;
 }
 
 // Modifiers
-void Player::setPosition(const float x, const float y)
-{
+void Player::setPosition(const float x, const float y) {
 	// Set player's position
 	this->playerSprite.setPosition(x, y);
 }
 
-void Player::setSprite(const int currentStage)
-{
+void Player::setSprite(const int currentStage) {
 	// Set player's player's sprite
 	if(currentStage == 2){
 		this->playerSprite.setTexture(this->playerT2);
@@ -100,49 +86,39 @@ void Player::setSprite(const int currentStage)
 	}
 }
 
-void Player::setHealth(const int health)
-{
+void Player::setHealth(const int health) {
 	this->playerHealth = health;
 }
 
-void Player::loseHealth(const int value)
-{
+void Player::loseHealth(const int value) {
 	this->playerHealth -= value;
 }
 
 // Functions
-void Player::move(const float dirX, const float dirY)
-{
+void Player::move(const float dirX, const float dirY) {
 	this->playerSprite.move(this->movementSpeed * dirX, this->movementSpeed * dirY);
 }
 
-const bool Player::canAttack()
-{
-	if (this->attackCooldown >= this->attackCooldownMax)
-	{
+const bool Player::canAttack() {
+	if (this->attackCooldown >= this->attackCooldownMax) {
 		this->attackCooldown = 0.f;
 		return true;
 	}
-	else
-	{
+	else {
 		return false;
 	}
 }
 
-void Player::updateAttack()
-{
-	if (this->attackCooldown < this->attackCooldownMax)
-	{
+void Player::updateAttack() {
+	if (this->attackCooldown < this->attackCooldownMax) {
 		this->attackCooldown += 1.f;
 	}
 }
 
-void Player::update()
-{
+void Player::update() {
 	this->updateAttack();
 }
 
-void Player::render(sf::RenderTarget& target)
-{
+void Player::render(sf::RenderTarget& target) {
 	target.draw(this->playerSprite);
 }

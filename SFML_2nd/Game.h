@@ -10,8 +10,7 @@
 #include "Bullet.h"
 #include "HUDText.h"
 
-class Game
-{
+class Game {
 private:
 	// Clock
 	sf::Clock clock;
